@@ -231,6 +231,12 @@ function init()
 
 
         //добавление меток городов стран и тд
+        map.events.add('click', function (e) {
+            var coords = e.get('coords');
+            $("#log-xy")[0].innerHTML = "[" + coords[0].toPrecision(6) + ", " + coords[1].toPrecision(6) + "]";
+            console.log("[" + coords[0].toPrecision(6) + ", " + coords[1].toPrecision(6) + "]");
+        });
+       
         points.forEach(p => {
             var point = new ymaps.Placemark(p.chords, {
                 balloonContent: p.content
