@@ -1,36 +1,38 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Что, Где, Когда!</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta charset="utf-8"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-   
-    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <script src="js/select2.min.js"></script>
-    <script src="js/points.js"></script>
-    <script src="js/characters.js"></script>
-    <script src="js/main.js"></script>
-    <link href="css/select2.min.css" rel="stylesheet" />
-    <link href="css/geo-history.css" rel="stylesheet" />
-</head>
+    <head>
+        <title>Здесь был Гендальф</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta charset="utf-8"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+        <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        <script src="js/select2.min.js"></script>
+        <script src="js/data.js"></script>
+        <script src="js/main.js"></script>
+        <link href="css/select2.min.css" rel="stylesheet" />
+        <link href="css/geo-history.css" rel="stylesheet" />
+    </head>
 
-<body>
-
-<div id="map"></div>
-<input id="x">
-<input id="y">
-</br>
-<p id="xy"> <p>
-    <p>
-        <label for="amount">Date range:</label>
-        <input type="text" id="amount" style="border: 0; color: #f6931f; font-weight: bold;" size="100"/>
-    </p>
-       
-      <div id="slider-range"></div>
-</body>
-
+    <body>
+        <div id="map-log">
+            <span id="log-x">0.00</span>
+            <span id="log-y">0.00</span>
+        </div>
+        <div id="map"></div>
+        <div id="bottom-panel">
+            <div id="controls-wrapper">
+                <div id="slider-wrapper">
+                    <span id="cur-date-label">Current date: <span id="cur-date">Sun Feb 01 3018</span></span>
+                    <div id="slider-range"></div>
+                </div>
+            </div>
+            <div id="buttons-wrapper">
+                Тута кнопачьки
+            </div>
+        </div>
+    </body>
 </html>

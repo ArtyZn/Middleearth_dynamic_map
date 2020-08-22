@@ -78,7 +78,7 @@ $(document).ready(function() {
         step: 86400,
         values: [ new Date(3018, 1, 1).getTime() / 1000],
         slide: function( event, ui ) {
-            $( "#amount" ).val( (new Date(ui.values[ 0 ] *1000).toDateString() )  );
+            $( "#cur-date" )[0].innerHTML = new Date(ui.values[ 0 ] *1000).toDateString();
             new_time(new Date(ui.values[ 0 ] *1000));
         }
     });
@@ -252,12 +252,11 @@ function init()
             // restrictMapArea: [[0, 0], [PIC_HEIGHT, PIC_WIDTH]]
         });
 
-        map.events.add('click', function (e) {
+        map.events.add('mousemove', function (e) {
             var coords = e.get('coords');
-            
-            $("#x").val(coords[0].toPrecision(6));
-            $("#y").val(coords[1].toPrecision(6));
-            $("#xy").text(  $("#xy").text()+ "["+coords[0].toPrecision(6) +" , " +coords[1].toPrecision(6) +"],")
+            console.log(coords[0].toPrecision(6));
+            $("#log-x")[0].innerHTML = coords[0].toPrecision(6);
+            $("#log-y")[0].innerHTML = coords[1].toPrecision(6);
         });
        
         points.forEach(p => {
