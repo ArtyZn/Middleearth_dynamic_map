@@ -1,3 +1,48 @@
+var map;
+
+var char_movement = {
+    "Test": {
+        points: [
+            [0, 0], 
+            [-1280.00, 1082.00]
+        ],
+        timeStart: new Date(),
+        timeEnd: new Date(),
+        placemarks: [],
+        visible: false
+    },
+    "Test2": {
+        points: [
+            [0, 0], 
+            [-1300, 1090]
+        ],
+        timeStart: new Date(),
+        timeEnd: new Date(),
+        placemarks: [],
+        visible: false
+    }
+}
+
+function toggle_char_visibility(char) {
+    if (!char_movement[char].visible) {
+        char_movement[char].visible = true;
+        char_movement[char].points.forEach(p => {
+            let point = new ymaps.Placemark(p, {
+                balloonContent: char
+            }, {
+                preset: 'islands#darkBlueDotIcon'
+            });
+            char_movement[char].placemarks.push(point);
+            map.geoObjects.add(point);
+        });
+    } else {
+        char_movement[char].visible = false;
+        char_movement[char].placemarks.forEach(p => {
+            map.geoObjects.remove(p);
+        });
+        char_movement[char].placemarks = [];
+    }
+}
 
 function init()
 {
@@ -46,7 +91,7 @@ function init()
     ymaps.mapType.storage.add(MAP_TYPE_NAME, mapType);
 
     // Вычисляем размер всех тайлов на максимальном зуме.
-    var worldSize = Math.pow(2, MAX_ZOOM) * 256,
+    var worldSize = Math.pow(2, MAX_ZOOM) * 256;
         /**
          * Создаем карту, указав свой новый тип карты.
          */
