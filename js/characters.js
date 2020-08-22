@@ -3,7 +3,8 @@ var characters =
 [
 	{
 		name:"Гендальф",
-		placemark: null,
+        placemark: null,
+        color: "#999B9B",
 		movements:
 		[
 			{
@@ -34,7 +35,8 @@ var characters =
 	},
 	{
 		name:"Фродо и Сэм",
-		placemark: null,
+        placemark: null,
+        color: "#7EED57",
 		movements:
 		[
 			{
@@ -90,7 +92,8 @@ var characters =
 	},
 	{
 		name:"Арагорн",
-		placemark: null,
+        placemark: null,
+        color: "#C5120C",
 		movements:
 		[
 			
