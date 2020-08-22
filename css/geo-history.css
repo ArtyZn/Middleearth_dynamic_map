@@ -102,8 +102,9 @@ div
     padding-top: 5px;
 }
 
-#cur-date-label {
-    margin-left: 10%;
+#toggle-time {
+    width: 10em;
+    font-size: 1em;
 }
 
 #cur-date {
