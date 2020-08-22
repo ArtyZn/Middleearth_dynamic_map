@@ -231,20 +231,21 @@ function init()
         $("#log-y")[0].innerHTML = coords[1].toPrecision(6);
     });
 
+
+    points.forEach(p => {
+        var point = new ymaps.Placemark(p.chords, {
+            iconContent: p.content
+        }, {
+            preset: 'islands#lightBlueStretchyIcon'
+        });
+        map.geoObjects.add(point);
+    });
+
     //добавление меток городов стран и тд
     map.events.add('click', function (e) {
         var coords = e.get('coords');
-        $("#log-xy")[0].innerHTML = "[" + coords[0].toPrecision(6) + ", " + coords[1].toPrecision(6) + "]";
-        console.log("[" + coords[0].toPrecision(6) + ", " + coords[1].toPrecision(6) + "]");
-    });
-    
-    points.forEach(p => {
-        var point = new ymaps.Placemark(p.chords, {
-            balloonContent: p.content
-        }, {
-            preset: 'islands#darkOrangeDotIcon'
-        });
-        map.geoObjects.add(point);
+        $("#log-xy")[0].innerHTML = $("#log-xy")[0].innerHTML + "[" + coords[0].toPrecision(6) + ", " + coords[1].toPrecision(6) + "]";
+        console.log("[" + coords[0].toPrecision(6) + ", " + coords[1].toPrecision(6) + "],");
     });
 
     //отображение путей героев
@@ -255,6 +256,7 @@ function init()
     if ($("#show-paths-checkbox").get(0).checked) characters.forEach(ch => { if ($('.show-path-checkbox[char="' + ch.name + '"]').get(0).checked) show_path(ch); });
     if ($("#show-chars-checkbox").get(0).checked) characters.forEach(ch => { if ($('.show-char-checkbox[char="' + ch.name + '"]').get(0).checked) show_char(ch); });
 }
+
 
 $(function(){
     $(".js-example-basic-multiple").select2();
