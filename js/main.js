@@ -89,9 +89,25 @@ function getDistance(p1, p2)
     return Math.sqrt((p1[0] - p2[0])*(p1[0] - p2[0]) + (p1[1] - p2[1])*(p1[1] - p2[1]));
 }
 
-function draw_path() {
+function draw_path(ch) {
 
+    var chords = [];
 
+    ch.movements.forEach(mov => {
+        mov.points.forEach(pt => chords.push(pt))
+    });
+
+    var myGeoObject = new ymaps.GeoObject({
+        geometry: {
+            type: "LineString",
+            coordinates: chords
+        }
+    }, {
+        strokeColor: "#000000",
+        // Ширина линии.
+        strokeWidth: 5
+    });
+    map.geoObjects.add(myGeoObject);
 }
 
 
@@ -117,7 +133,7 @@ function new_time(date)
                 
                 if(start <= date &&  date <=  end)
                 {
-                        //изменение описания метки
+                    //изменение описания метки
                     ch.placemark.properties.set({
                         iconContent: ch.name,
                         balloonContent : ch.movements[i].description
@@ -173,17 +189,14 @@ function new_time(date)
 function init()
 {
 
+    var LAYER_NAME = 'user#layer',
+    MAP_TYPE_NAME = 'user#customMap',
+    TILES_PATH = 'images\\tiles',
 
-        var LAYER_NAME = 'user#layer',
-        MAP_TYPE_NAME = 'user#customMap',
-    // Директория с тайлами.
-        TILES_PATH = 'images\\tiles',
-    /* Для того чтобы вычислить координаты левого нижнего и правого верхнего углов прямоугольной координатной
-     * области, нам необходимо знать максимальный зум, ширину и высоту изображения в пикселях на максимальном зуме.
-     */
-        MAX_ZOOM = 23,
-        PIC_WIDTH = 8192, //,
-        PIC_HEIGHT = 6144;//;
+
+    MAX_ZOOM = 23,
+    PIC_WIDTH = 8192, //,
+    PIC_HEIGHT = 6144;//;
 
     /**
      * Конструктор, создающий собственный слой.
@@ -257,7 +270,7 @@ function init()
             map.geoObjects.add(point);
         });
         
-
+        characters.forEach(ch => draw_path(ch));
 }
 
 $(function(){
