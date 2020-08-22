@@ -304,12 +304,13 @@ $(function(){
 
     $("#slider-range").slider({
         range: false,
-        min: new Date(3018, 0, 1).getTime() / 1000,
+        min: new Date(3018, 2, 1).getTime() / 1000,
         max: new Date(3019, 2, 25).getTime() / 1000,
-        step: 86400,
+        step: 43200,
         values: [ new Date(3018, 1, 1).getTime() / 1000],
         slide: function( event, ui ) {
-            $( "#cur-date" )[0].innerHTML = new Date(ui.values[ 0 ] *1000).toDateString();
+            var date = new Date(ui.values[ 0 ] *1000);
+            $( "#cur-date" )[0].innerHTML = date.getFullYear() +"-" + date.getMonth()+ "-" + date.getDay();            
             curDate = new Date(ui.values[ 0 ] *1000);
             new_time(curDate);
         }
