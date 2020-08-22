@@ -217,7 +217,6 @@ function init()
 
         map.events.add('mousemove', function (e) {
             var coords = e.get('coords');
-          
             $("#log-x")[0].innerHTML = coords[0].toPrecision(6);
             $("#log-y")[0].innerHTML = coords[1].toPrecision(6);
         });
