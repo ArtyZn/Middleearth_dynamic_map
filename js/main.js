@@ -1,4 +1,6 @@
 var map, zoom;
+var clusterer, curDate;
+
 
 function toggle_char_visibility(char) {
     if (!char_movement[char].visible) {
@@ -57,13 +59,17 @@ function show_path(ch) {
 
 function hide_char(ch) {
     ch.placemark.options.set({visible: false});
+    ch.hidden = true;
+    new_time(curDate);
 }
 
 function show_char(ch) {
     ch.placemark.options.set({visible: true});
+    ch.hidden = false;
+    new_time(curDate);
 }
 
-var clusterer;
+
 function new_time(date)
 {
     var heroes = [];
@@ -129,7 +135,10 @@ function new_time(date)
                             var y = p1[1] + (p2[1] - p1[1])*pers;
                         
                             ch.placemark.geometry.setCoordinates([x,y]);
-                            heroes.push(ch.placemark);
+                            if(ch.hidden == false) {
+                                heroes.push(ch.placemark);
+                            }
+
                             map.geoObjects.add(ch.placemark);
                         }
                     }
@@ -269,7 +278,8 @@ function init()
     //отображение путей героев
     characters.forEach(ch => draw_path(ch));
     
-    new_time(new Date(3018, 1, 1).getTime());
+    curDate = new Date(3018, 1, 1).getTime();
+    new_time(curDate);
 
     if ($("#show-paths-checkbox").get(0).checked) characters.forEach(ch => { if ($('.show-path-checkbox[char="' + ch.name + '"]').get(0).checked) show_path(ch); });
     if ($("#show-chars-checkbox").get(0).checked) characters.forEach(ch => { if ($('.show-char-checkbox[char="' + ch.name + '"]').get(0).checked) show_char(ch); });
@@ -291,6 +301,7 @@ function createBalloonContent(zoom, content){
 $(function(){
     $(".js-example-basic-multiple").select2();
     ymaps.ready(init);
+
     $("#slider-range").slider({
         range: false,
         min: new Date(3018, 2, 1).getTime() / 1000,
@@ -299,8 +310,9 @@ $(function(){
         values: [ new Date(3018, 1, 1).getTime() / 1000],
         slide: function( event, ui ) {
             var date = new Date(ui.values[ 0 ] *1000);
-            $( "#cur-date" )[0].innerHTML = date.getFullYear() +"-" + date.getMonth()+ "-" + date.getDay();
-            new_time(new Date(ui.values[ 0 ] *1000));
+            $( "#cur-date" )[0].innerHTML = date.getFullYear() +"-" + date.getMonth()+ "-" + date.getDay();            
+            curDate = new Date(ui.values[ 0 ] *1000);
+            new_time(curDate);
         }
     });
     $("#tabs").tabs();
