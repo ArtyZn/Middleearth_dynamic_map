@@ -321,8 +321,16 @@ function stopTime()
     clearInterval(interval);
 }
 
+<<<<<<< HEAD
 function init_slider()
 {
+=======
+
+$(function(){
+    $(".js-example-basic-multiple").select2();
+    ymaps.ready(init);
+
+>>>>>>> db9e3c420f3511e4ef572d02a9428ae1910ab5e5
     $("#slider-range").slider({
         range: false,
         min: new Date("3018-04-04").getTime() / 1000,
