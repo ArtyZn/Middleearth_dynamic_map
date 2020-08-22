@@ -44,6 +44,22 @@ function toggle_char_visibility(char) {
     }
 }
 
+$(function() {
+    $( "#slider-range" ).slider({
+      range: false,
+      min: new Date('3018.01.01').getTime() / 1000,
+      max: new Date('3022.01.01').getTime() / 1000,
+      step: 86400,
+      values: [ new Date('3018.01.01').getTime() / 1000],
+      slide: function( event, ui ) {
+        $( "#amount" ).val( (new Date(ui.values[ 0 ] *1000).toDateString() )  );
+      }
+    });
+    $( "#amount" ).val( (new Date($( "#slider-range" ).slider( "values", 0 )*1000).toDateString()));
+  });
+
+
+
 function init()
 {
 
