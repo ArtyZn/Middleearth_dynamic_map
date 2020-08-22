@@ -233,7 +233,7 @@ function init()
             
             $("#x").val(coords[0].toPrecision(6));
             $("#y").val(coords[1].toPrecision(6));
-            $("#xy").text("["+coords[0].toPrecision(6) +" , " +coords[1].toPrecision(6) +"]")
+            $("#xy").text(  $("#xy").text()+ "["+coords[0].toPrecision(6) +" , " +coords[1].toPrecision(6) +"],")
         });
        
         points.forEach(p => {
