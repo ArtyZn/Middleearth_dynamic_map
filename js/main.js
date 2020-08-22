@@ -92,12 +92,19 @@ return Math.sqrt((p1[0] - p2[0])*(p1[0] - p2[0]) + (p1[1] - p2[1])*(p1[1] - p2[1
 function new_time(date)
 {
 
-    characters.forEach(ch=>
+    characters.forEach(ch =>
         {
      
-            if(ch.placemark!=null)
+            if(ch.placemark == null)
             {
-                map.geoObjects.remove(ch.placemark);
+                ch.placemark =  new ymaps.Placemark([ch.movements[0].points[0][0], ch.movements[0].points[0][1]], {
+                    balloonContent: ch.name
+                }, {
+                    preset: 'islands#darkOrangeStretchyIcon'
+                });
+                ch.placemark.properties.set({
+                    iconContent: ch.name
+                });
             }
             for(var i=0; i< ch.movements.length; i++)
             {
@@ -131,8 +138,6 @@ function new_time(date)
                         //alert(prev + " " + dist +"  " + curDist )
                         if(prev<=dist && dist<= curDist)
                         {
-                           
-                            
                             var a = dist-prev;
                             var b = curDist - prev;
                             var pers = a*1.0/b;
@@ -140,11 +145,8 @@ function new_time(date)
                            // alert(p1 + " " + p2 + "  " + pers);
                             var x = p1[0] + (p2[0] - p1[0])*pers;
                             var y = p1[1] + (p2[1] - p1[1])*pers;
-                            ch.placemark =  new ymaps.Placemark([x,y], {
-                                balloonContent: ch.name
-                            }, {
-                                preset: 'islands#darkOrangeDotIcon'
-                            });
+                        
+                            ch.placemark.geometry.setCoordinates([x,y]);
                             map.geoObjects.add(ch.placemark);
                         }
                     }
