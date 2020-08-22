@@ -41,48 +41,57 @@
                         <li><a href="#tabs-3">Персонажи</a></li>
                         <li><a href="#tabs-4">Локации</a></li>
                     </ul>
-                    <div id="tabs-1">
-                        <input type="checkbox" id="show-paths-checkbox" checked>
-                        <label for="show-paths-checkbox">Показывать пути</label><br>
-                        <input type="checkbox" id="show-locations-checkbox" checked>
-                        <label for="show-locations-checkbox">Показывать локации</label><br>
-                        <input type="checkbox" id="show-chars-checkbox" checked>
-                        <label for="show-chars-checkbox">Показывать персонажей</label>
+                    <div id="slider-vertical" style="position: absolute; height: auto; top: 42px; bottom: 9px; margin-left: 2px"></div>
+                    <div id="tabs-1" class="gui-tab">
+                        <div class="tab-wrapper-inner">
+                            <input type="checkbox" id="show-paths-checkbox" checked>
+                            <label for="show-paths-checkbox">Показывать пути</label><br>
+                            <input type="checkbox" id="show-chars-checkbox" checked>
+                            <label for="show-chars-checkbox">Показывать персонажей</label><br>
+                            <input type="checkbox" id="show-locations-checkbox" checked>
+                            <label for="show-locations-checkbox">Показывать локации</label>
+                        </div>
                     </div>
-                    <div id="tabs-2">
-                        <input type="checkbox" class="show-path-checkbox" char="Гендальф Серый" checked>
-                        <label>Показывать путь Гендальфа Серого</label><br>
-                        <input type="checkbox" class="show-path-checkbox" char="Гендальф Белый" checked>
-                        <label>Показывать путь Гендальфа Белого</label><br>
-                        <input type="checkbox" class="show-path-checkbox" char="Фродо и Сэм" checked>
-                        <label>Показывать путь Фродо и Сэма</label><br>
-                        <input type="checkbox" class="show-path-checkbox" char="Арагорн" checked>
-                        <label>Показывать путь Арагорна</label><br>
-                        <input type="checkbox" class="show-path-checkbox" char="Леголас и Гимли" checked>
-                        <label>Показывать путь Леголаса и Гимли</label><br>
-                        <input type="checkbox" class="show-path-checkbox" char="Пиппин" checked>
-                        <label>Показывать путь Пиппина</label><br>
-                        <input type="checkbox" class="show-path-checkbox" char="Мэрри" checked>
-                        <label>Показывать путь Мэрри</label><br>
+                    <div id="tabs-2" class="gui-tab">
+                        <div class="tab-wrapper-inner">
+                           <input type="checkbox" class="show-path-checkbox" char="Гендальф Серый" checked>
+                            <label>Показывать путь Гендальфа Серого</label><br>
+                            <input type="checkbox" class="show-path-checkbox" char="Гендальф Белый" checked>
+                            <label>Показывать путь Гендальфа Белого</label><br>
+                            <input type="checkbox" class="show-path-checkbox" char="Фродо и Сэм" checked>
+                            <label>Показывать путь Фродо и Сэма</label><br>
+                            <input type="checkbox" class="show-path-checkbox" char="Арагорн" checked>
+                            <label>Показывать путь Арагорна</label><br>
+                            <input type="checkbox" class="show-path-checkbox" char="Леголас и Гимли" checked>
+                            <label>Показывать путь Леголаса и Гимли</label><br>
+                            <input type="checkbox" class="show-path-checkbox" char="Пиппин" checked>
+                            <label>Показывать путь Пиппина</label><br>
+                            <input type="checkbox" class="show-path-checkbox" char="Мэрри" checked>
+                            <label>Показывать путь Мэрри</label><br> 
+                        </div>
                     </div>
-                    <div id="tabs-3">
-                        <input type="checkbox" class="show-char-checkbox" char="Гендальф Серый" checked>
-                        <label>Показывать Гендальфа Серого</label><br>
-                        <input type="checkbox" class="show-char-checkbox" char="Гендальф Белый" checked>
-                        <label>Показывать Гендальфа Белого</label><br>
-                        <input type="checkbox" class="show-char-checkbox" char="Фродо и Сэм" checked>
-                        <label>Показывать Фродо и Сэма</label><br>
-                        <input type="checkbox" class="show-char-checkbox" char="Арагорн" checked>
-                        <label>Показывать Арагорна</label><br>
-                        <input type="checkbox" class="show-char-checkbox" char="Леголас и Гимли" checked>
-                        <label>Показывать  Леголаса и Гимли</label><br>
-                        <input type="checkbox" class="show-char-checkbox" char="Пиппин" checked>
-                        <label>Показывать Пиппина</label><br>
-                        <input type="checkbox" class="show-char-checkbox" char="Мэрри" checked>
-                        <label>Показывать Мэрри</label><br>
+                    <div id="tabs-3" class="gui-tab">
+                        <div class="tab-wrapper-inner">
+                            <input type="checkbox" class="show-char-checkbox" char="Гендальф Серый" checked>
+                            <label>Показывать Гендальфа Серого</label><br>
+                            <input type="checkbox" class="show-char-checkbox" char="Гендальф Белый" checked>
+                            <label>Показывать Гендальфа Белого</label><br>
+                            <input type="checkbox" class="show-char-checkbox" char="Фродо и Сэм" checked>
+                            <label>Показывать Фродо и Сэма</label><br>
+                            <input type="checkbox" class="show-char-checkbox" char="Арагорн" checked>
+                            <label>Показывать Арагорна</label><br>
+                            <input type="checkbox" class="show-char-checkbox" char="Леголас и Гимли" checked>
+                            <label>Показывать  Леголаса и Гимли</label><br>
+                            <input type="checkbox" class="show-char-checkbox" char="Пиппин" checked>
+                            <label>Показывать Пиппина</label><br>
+                            <input type="checkbox" class="show-char-checkbox" char="Мэрри" checked>
+                            <label>Показывать Мэрри</label><br>                            
+                        </div>
                     </div>
-                    <div id="tabs-4">
-                        
+                    <div id="tabs-4" class="gui-tab">
+                        <div class="tab-wrapper-inner">
+
+                        </div>
                     </div>
                   </div>
             </div>

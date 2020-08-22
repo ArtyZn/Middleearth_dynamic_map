@@ -352,4 +352,15 @@ $(function(){
             }
         });
     });
+
+    $("#slider-vertical").slider({
+        orientation: "vertical",
+        range: "min",
+        min: 0,
+        max: 100,
+        value: 100,
+        slide: function( event, ui ) {
+          $(".tab-wrapper-inner").css({"margin-top": "-" + (100 - ui.value) * 2 + "px"})
+        }
+      });
 });

@@ -62,11 +62,6 @@ div
     width: 100vw;
 }
 
-.ui-slider-handle{
-    width: 0.2em !important;
-    margin-left: 0 !important;
-}
-
 #slider-range {
     width: 99%;
     margin: 5px;
@@ -127,4 +122,8 @@ div
 #tabs > ul > li > a {
     padding: .2em .1em;
     font-size: 12pt;
+}
+
+.gui-tab {
+    overflow: hidden;
 }
