@@ -259,7 +259,12 @@ $(function(){
     });
     $("#tabs").tabs();
     $("#show-paths-checkbox").on("change", function (e) {
-        characters.forEach(ch => hide_path(ch));
+        if ($("#show-paths-checkbox").get(0).checked) {
+            characters.forEach(ch => show_path(ch));
+        } else {
+            characters.forEach(ch => hide_path(ch));
+        }
+        
     });
     /*
     characters.forEach(ch => {
