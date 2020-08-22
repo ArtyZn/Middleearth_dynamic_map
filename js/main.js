@@ -1,5 +1,4 @@
-var map;
-
+var map, zoom;
 
 function toggle_char_visibility(char) {
     if (!char_movement[char].visible) {
@@ -28,13 +27,11 @@ function getDistance(p1, p2)
 }
 
 function draw_path(ch) {
-
     var chords = [];
 
     ch.movements.forEach(mov => {
         mov.points.forEach(pt => chords.push(pt))
     });
-
     var myGeoObject = new ymaps.GeoObject({
         geometry: {
             type: "LineString",
@@ -161,9 +158,7 @@ function init()
     PIC_WIDTH = 8192, //,
     PIC_HEIGHT = 6144;//;
 
-    /**
-     * Конструктор, создающий собственный слой.
-     */
+    
     var Layer = function () {
         var layer = new ymaps.Layer(TILES_PATH + '/%z/tile-%x-%y.jpg', {
             // Если есть необходимость показать собственное изображение в местах неподгрузившихся тайлов,
@@ -215,20 +210,31 @@ function init()
         // restrictMapArea: [[0, 0], [PIC_HEIGHT, PIC_WIDTH]]
     });
 
+    zoom = map.getZoom();
+
+    map.events.add('boundschange', function () {
+        var currentZoom = map.getZoom();
+        if (currentZoom != zoom) {
+            zoom = currentZoom;
+        }
+        
+        points.forEach(p => p.placemark.options.set({preset: createPreset(zoom)}));
+    });
+
     map.events.add('mousemove', function (e) {
         var coords = e.get('coords');
         $("#log-x")[0].innerHTML = coords[0].toPrecision(6);
         $("#log-y")[0].innerHTML = coords[1].toPrecision(6);
     });
 
-
     points.forEach(p => {
         var point = new ymaps.Placemark(p.chords, {
             iconContent: p.content
         }, {
-            preset: 'islands#lightBlueStretchyIcon'
+            preset: createPreset(zoom)
         });
         map.geoObjects.add(point);
+        p.placemark = point;
     });
 
     //добавление меток городов стран и тд
@@ -252,6 +258,10 @@ function init()
     });
 }
 
+function createPreset(zoom){
+    if(zoom != 21)return 'islands#lightBlueStretchyIcon';
+    return 'islands#lightBlueCircleDotIcon';
+}
 
 $(function(){
     $(".js-example-basic-multiple").select2();
