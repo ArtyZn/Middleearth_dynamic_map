@@ -231,9 +231,9 @@ function init()
        
         points.forEach(p => {
             var point = new ymaps.Placemark(p.chords, {
-                balloonContent: p.content
+                iconContent: p.content
             }, {
-                preset: 'islands#darkOrangeDotIcon'
+                preset: 'islands#lightBlueStretchyIcon'
             });
             map.geoObjects.add(point);
         });
