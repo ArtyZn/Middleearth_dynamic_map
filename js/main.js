@@ -227,8 +227,19 @@ function init()
         if (currentZoom != zoom) {
             zoom = currentZoom;
         }
-        
-        points.forEach(p => p.placemark.options.set({preset: createPreset(zoom)}));
+
+
+        points.forEach(p => {
+            //p.placemark.balloon.close();
+            p.placemark.options.set({
+                preset: createPreset(zoom)
+            });
+            
+            p.placemark.properties.set({
+                iconContent: createIconContent(zoom, p.content),
+                balloonContent: createBalloonContent(zoom, p.content)
+            });
+        });
     });
 
     map.events.add('mousemove', function (e) {
@@ -239,7 +250,8 @@ function init()
 
     points.forEach(p => {
         var point = new ymaps.Placemark(p.chords, {
-            iconContent: p.content
+            iconContent: createIconContent(zoom, p.content),
+            balloonContent: createBalloonContent(zoom, p.content)
         }, {
             preset: createPreset(zoom)
         });
@@ -264,8 +276,16 @@ function init()
 }
 
 function createPreset(zoom){
-    if(zoom != 21)return 'islands#lightBlueStretchyIcon';
-    return 'islands#lightBlueCircleDotIcon';
+    if(zoom == 21) return 'islands#lightBlueCircleDotIcon';
+    return 'islands#lightBlueStretchyIcon';
+}
+function createIconContent(zoom, content){
+    if(zoom == 21) return null;
+    return content;
+}
+function createBalloonContent(zoom, content){
+    if(zoom == 21) return content;
+    return null;
 }
 
 $(function(){
