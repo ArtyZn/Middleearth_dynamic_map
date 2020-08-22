@@ -210,6 +210,12 @@ function init()
             $("#log-x")[0].innerHTML = coords[0].toPrecision(6);
             $("#log-y")[0].innerHTML = coords[1].toPrecision(6);
         });
+
+        map.events.add('click', function (e) {
+            var coords = e.get('coords');
+            $("#log-xy")[0].innerHTML = "[" + coords[0].toPrecision(6) + ", " + coords[1].toPrecision(6) + "]";
+            console.log("[" + coords[0].toPrecision(6) + ", " + coords[1].toPrecision(6) + "]");
+        });
        
         points.forEach(p => {
             var point = new ymaps.Placemark(p.chords, {
