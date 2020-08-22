@@ -73,16 +73,89 @@ function toggle_char_visibility(char) {
 $(document).ready(function() {
     $( "#slider-range" ).slider({
         range: false,
-        min: new Date(3018, 0, 1).getTime() / 1000,
-        max: new Date(3022, 0, 1).getTime() / 1000,
+        min: new Date(3018, 1, 1).getTime() / 1000,
+        max: new Date(3022, 1, 1).getTime() / 1000,
         step: 86400,
-        values: [ new Date(3018, 0, 1).getTime() / 1000],
+        values: [ new Date(3018, 1, 1).getTime() / 1000],
         slide: function( event, ui ) {
             $( "#amount" ).val( (new Date(ui.values[ 0 ] *1000).toDateString() )  );
+            new_time(new Date(ui.values[ 0 ] *1000));
         }
     });
     $( "#amount" ).val( (new Date($( "#slider-range" ).slider( "values", 0 )*1000).toDateString()));
 });
+function getDistance(p1, p2)
+{
+return Math.sqrt((p1[0] - p2[0])*(p1[0] - p2[0]) + (p1[1] - p2[1])*(p1[1] - p2[1]));
+}
+
+function new_time(date)
+{
+
+    characters.forEach(ch=>
+        {
+     
+            if(ch.placemark!=null)
+            {
+                map.geoObjects.remove(ch.placemark);
+            }
+            for(var i=0; i< ch.movements.length; i++)
+            {
+                var start = new Date(ch.movements[i].start);
+                var end =  new Date(ch.movements[i].end);
+               // alert(start +"  " + date+ " " + end);
+                
+                if(start <= date &&  date <=  end)
+                {
+                    var totalDist=0;
+                    for(var j=0; j < ch.movements[i].points.length -1; j++)
+                    {
+                        p1 = ch.movements[i].points[j];
+                        p2 = ch.movements[i].points[j+1];
+                        totalDist += getDistance(p1, p2);
+
+                    }
+                    
+                    var t1 = date.getTime() - start.getTime();
+                    var t2 = end.getTime() - start.getTime();
+                    var persents = t1*1.0/t2;
+                    var dist = totalDist*persents;
+                    var curDist=0;
+                 
+                    for(var j=0; j < ch.movements[i].points.length -1; j++)
+                    {
+                        p1 = ch.movements[i].points[j];
+                        p2 = ch.movements[i].points[j+1];
+                        prev =  curDist;
+                        curDist += getDistance(p1, p2);
+                        //alert(prev + " " + dist +"  " + curDist )
+                        if(prev<=dist && dist<= curDist)
+                        {
+                           
+                            
+                            var a = dist-prev;
+                            var b = curDist - prev;
+                            var pers = a*1.0/b;
+                            //alert(pers);
+                           // alert(p1 + " " + p2 + "  " + pers);
+                            var x = p1[0] + (p2[0] - p1[0])*pers;
+                            var y = p1[1] + (p2[1] - p1[1])*pers;
+                            ch.placemark =  new ymaps.Placemark([x,y], {
+                                balloonContent: ch.name
+                            }, {
+                                preset: 'islands#darkOrangeDotIcon'
+                            });
+                            map.geoObjects.add(ch.placemark);
+                        }
+                    }
+                }
+
+
+            }
+
+        })
+
+}
 
 
 
