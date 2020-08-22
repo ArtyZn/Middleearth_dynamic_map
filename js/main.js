@@ -197,55 +197,63 @@ function init()
         /**
          * Создаем карту, указав свой новый тип карты.
          */
-        map = new ymaps.Map('map', {
-            center: [0, 0],
-            zoom: 1,
-            controls: ['zoomControl'],
-            type: MAP_TYPE_NAME
+    map = new ymaps.Map('map', {
+        center: [0, 0],
+        zoom: 1,
+        controls: ['zoomControl'],
+        type: MAP_TYPE_NAME
+    }, {
+
+        // Задаем в качестве проекции Декартову. При данном расчёте центр изображения будет лежать в координатах [0, 0].
+        projection: new ymaps.projection.Cartesian([[PIC_HEIGHT / 2 - worldSize, -PIC_WIDTH / 2], [PIC_HEIGHT / 2, worldSize - PIC_WIDTH / 2]], [false, false]),
+        // Устанавливаем область просмотра карты так, чтобы пользователь не смог выйти за пределы изображения.
+        restrictMapArea: [[-PIC_HEIGHT / 2, -PIC_WIDTH / 2], [PIC_HEIGHT / 2, PIC_WIDTH / 2]]
+
+        // При данном расчёте, в координатах [0, 0] будет находиться левый нижний угол изображения,
+        // правый верхний будет находиться в координатах [PIC_HEIGHT, PIC_WIDTH].
+        // projection: new ymaps.projection.Cartesian([[PIC_HEIGHT - worldSize, 0], [PIC_HEIGHT, worldSize]], [false, false]),
+        // restrictMapArea: [[0, 0], [PIC_HEIGHT, PIC_WIDTH]]
+    });
+
+    map.events.add('mousemove', function (e) {
+        var coords = e.get('coords');
+        $("#log-x")[0].innerHTML = coords[0].toPrecision(6);
+        $("#log-y")[0].innerHTML = coords[1].toPrecision(6);
+    });
+
+    //добавление меток городов стран и тд
+    map.events.add('click', function (e) {
+        var coords = e.get('coords');
+        $("#log-xy")[0].innerHTML = "[" + coords[0].toPrecision(6) + ", " + coords[1].toPrecision(6) + "]";
+        console.log("[" + coords[0].toPrecision(6) + ", " + coords[1].toPrecision(6) + "]");
+    });
+    
+    points.forEach(p => {
+        var point = new ymaps.Placemark(p.chords, {
+            balloonContent: p.content
         }, {
-
-            // Задаем в качестве проекции Декартову. При данном расчёте центр изображения будет лежать в координатах [0, 0].
-            projection: new ymaps.projection.Cartesian([[PIC_HEIGHT / 2 - worldSize, -PIC_WIDTH / 2], [PIC_HEIGHT / 2, worldSize - PIC_WIDTH / 2]], [false, false]),
-            // Устанавливаем область просмотра карты так, чтобы пользователь не смог выйти за пределы изображения.
-            restrictMapArea: [[-PIC_HEIGHT / 2, -PIC_WIDTH / 2], [PIC_HEIGHT / 2, PIC_WIDTH / 2]]
-
-            // При данном расчёте, в координатах [0, 0] будет находиться левый нижний угол изображения,
-            // правый верхний будет находиться в координатах [PIC_HEIGHT, PIC_WIDTH].
-            // projection: new ymaps.projection.Cartesian([[PIC_HEIGHT - worldSize, 0], [PIC_HEIGHT, worldSize]], [false, false]),
-            // restrictMapArea: [[0, 0], [PIC_HEIGHT, PIC_WIDTH]]
+            preset: 'islands#darkOrangeDotIcon'
         });
+        map.geoObjects.add(point);
+    });
 
-        map.events.add('mousemove', function (e) {
-            var coords = e.get('coords');
-            $("#log-x")[0].innerHTML = coords[0].toPrecision(6);
-            $("#log-y")[0].innerHTML = coords[1].toPrecision(6);
-        });
+    //отображение путей героев
+    characters.forEach(ch => draw_path(ch));
+    
+    if ($("#show-paths-checkbox").get(0).checked) characters.forEach(ch => show_path(ch)); else characters.forEach(ch => hide_path(ch));
 
-
-        //добавление меток городов стран и тд
-        map.events.add('click', function (e) {
-            var coords = e.get('coords');
-            $("#log-xy")[0].innerHTML = "[" + coords[0].toPrecision(6) + ", " + coords[1].toPrecision(6) + "]";
-            console.log("[" + coords[0].toPrecision(6) + ", " + coords[1].toPrecision(6) + "]");
-        });
-       
-        points.forEach(p => {
-            var point = new ymaps.Placemark(p.chords, {
-                balloonContent: p.content
-            }, {
-                preset: 'islands#darkOrangeDotIcon'
-            });
-            map.geoObjects.add(point);
-        });
-
-        //отображение путей героев
-        characters.forEach(ch => draw_path(ch));
+    characters.forEach(ch => {
+        if ($('.show-path-checkbox[char="' + ch.name + '"]').get(0).checked) {
+            show_path(ch);
+        } else {
+            hide_path(ch);
+        }
+    });
 }
 
 $(function(){
     $(".js-example-basic-multiple").select2();
     ymaps.ready(init);
-
     $("#slider-range").slider({
         range: false,
         min: new Date(3018, 0, 1).getTime() / 1000,
@@ -259,18 +267,17 @@ $(function(){
     });
     $("#tabs").tabs();
     $("#show-paths-checkbox").on("change", function (e) {
-        if ($("#show-paths-checkbox").get(0).checked) {
-            characters.forEach(ch => show_path(ch));
-        } else {
-            characters.forEach(ch => hide_path(ch));
-        }
-        
+        if ($("#show-paths-checkbox").get(0).checked) characters.forEach(ch => show_path(ch)); else characters.forEach(ch => hide_path(ch));
     });
-    /*
-    characters.forEach(ch => {
-        if ($('.show-path-checkbox[char="' + ch.name + '"]').get(0).checked) {
-            show_path(ch);
-        }
-    });
-    */
+    $(".show-path-checkbox").on("change", function (e) {
+        characters.forEach(ch => {
+            if (e.target.attributes.getNamedItem("char").value == ch.name) {
+                if (e.target.checked) {
+                    show_path(ch);
+                } else {
+                    hide_path(ch);
+                }
+            }
+        });
+    })
 });
