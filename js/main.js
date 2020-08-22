@@ -68,6 +68,30 @@ function init()
             // restrictMapArea: [[0, 0], [PIC_HEIGHT, PIC_WIDTH]]
         });
 
+        map.events.add('click', function (e) {
+            var coords = e.get('coords');
+            
+            $("#x").val(coords[0].toPrecision(6));
+            $("#y").val(coords[1].toPrecision(6));
+            $("#xy").text("["+coords[0].toPrecision(6) +" , " +coords[1].toPrecision(6) +"]")
+        });
+        var points = [
+            {
+                chords: [-1280.00 , 1082.00],
+                content: "Минас-Тирит"
+            }
+
+        ]
+        points.forEach(p => {
+            var point = new ymaps.Placemark(p.chords, {
+                balloonContent: p.content
+            }, {
+                preset: 'islands#darkOrangeDotIcon'
+            });
+        
+            map.geoObjects.add(point);
+        });
+        
 
 }
 
