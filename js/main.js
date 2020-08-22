@@ -239,7 +239,7 @@ function init()
 
 
         points.forEach(p => {
-            //p.placemark.balloon.close();
+            p.placemark.balloon.close();
             p.placemark.options.set({
                 preset: createPreset(zoom)
             });
@@ -297,6 +297,7 @@ function createBalloonContent(zoom, content){
     if(zoom == 21) return content;
     return null;
 }
+
 
 $(function(){
     $(".js-example-basic-multiple").select2();
