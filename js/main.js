@@ -1,5 +1,5 @@
 var map, zoom;
-var clusterer, curDate;
+var clusterer, curDate = new Date("3018-04-04");
 
 
 function toggle_char_visibility(char) {
@@ -72,6 +72,10 @@ function show_char(ch) {
 
 function new_time(date)
 {
+
+
+  $( "#cur-date" )[0].innerHTML = date.getFullYear() +"-" + date.getMonth()+ "-" + date.getDate();
+  //$( "#cur-date" )[0].innerHTML = date;
     var heroes = [];
     characters.forEach(ch =>
         {
@@ -93,7 +97,7 @@ function new_time(date)
                 var end =  new Date(ch.movements[i].end);
                // alert(start +"  " + date+ " " + end);
                 
-                if(start <= date &&  date <=  end)
+                if(start.getTime() <= date.getTime() &&  date.getTime() <=  end.getTime())
                 {
                     //изменение описания метки
                     ch.placemark.properties.set({
@@ -278,7 +282,7 @@ function init()
     //отображение путей героев
     characters.forEach(ch => draw_path(ch));
     
-    curDate = new Date(3018, 1, 1).getTime();
+    curDate = new Date("3018-04-04");
     new_time(curDate);
 
     if ($("#show-paths-checkbox").get(0).checked) characters.forEach(ch => { if ($('.show-path-checkbox[char="' + ch.name + '"]').get(0).checked) show_path(ch); });
@@ -297,24 +301,48 @@ function createBalloonContent(zoom, content){
     if(zoom == 21) return content;
     return null;
 }
+var started = false;
+var interval;
+function startTime()
+{
+    if(started)
+         stopTime()
+
+    interval = setInterval(function() {
+        curDate = new Date(curDate.getTime() + 1000000);
+        new_time(curDate);
+        //init_slider();
+      }, 10);
+      started = true;
+}
+function stopTime()
+{
+    started = false;
+    clearInterval(interval);
+}
+
+function init_slider()
+{
+    $("#slider-range").slider({
+        range: false,
+        min: new Date("3018-04-04").getTime() / 1000,
+        max: new Date("3019-03-25").getTime() / 1000,
+        step: 43200,
+        values: [curDate.getTime()/1000],
+        slide: function( event, ui ) {
+            var date = new Date(ui.values[ 0 ] *1000);
+                       
+            curDate = new Date(ui.values[ 0 ] *1000);
+            new_time(curDate);
+        }
+    });
+}
 
 $(function(){
     $(".js-example-basic-multiple").select2();
     ymaps.ready(init);
 
-    $("#slider-range").slider({
-        range: false,
-        min: new Date(3018, 2, 1).getTime() / 1000,
-        max: new Date(3019, 2, 25).getTime() / 1000,
-        step: 43200,
-        values: [ new Date(3018, 1, 1).getTime() / 1000],
-        slide: function( event, ui ) {
-            var date = new Date(ui.values[ 0 ] *1000);
-            $( "#cur-date" )[0].innerHTML = date.getFullYear() +"-" + date.getMonth()+ "-" + date.getDay();            
-            curDate = new Date(ui.values[ 0 ] *1000);
-            new_time(curDate);
-        }
-    });
+    init_slider();
     $("#tabs").tabs();
     $("#show-paths-checkbox").on("change", function (e) {
         if ($("#show-paths-checkbox").get(0).checked) {
