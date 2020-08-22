@@ -229,6 +229,7 @@ function init()
             preset: 'islands#lightBlueStretchyIcon'
         });
         map.geoObjects.add(point);
+    });
 
     //добавление меток городов стран и тд
     map.events.add('click', function (e) {
@@ -249,7 +250,8 @@ function init()
             hide_path(ch);
         }
     });
-});
+}
+
 
 $(function(){
     $(".js-example-basic-multiple").select2();
