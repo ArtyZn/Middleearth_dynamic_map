@@ -162,13 +162,7 @@ function init()
             $("#y").val(coords[1].toPrecision(6));
             $("#xy").text("["+coords[0].toPrecision(6) +" , " +coords[1].toPrecision(6) +"]")
         });
-        var points = [
-            {
-                chords: [-1280.00 , 1082.00],
-                content: "Минас-Тирит"
-            }
-
-        ]
+       
         points.forEach(p => {
             var point = new ymaps.Placemark(p.chords, {
                 balloonContent: p.content
