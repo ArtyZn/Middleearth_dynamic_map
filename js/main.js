@@ -62,15 +62,17 @@ function draw_path(ch) {
     map.geoObjects.add(myGeoObject);
 }
 
-
+var clusterer;
 function new_time(date)
 {
+    var heroes = [];
     characters.forEach(ch =>
         {
      
             if(ch.placemark == null)
             {
                 ch.placemark =  new ymaps.Placemark([ch.movements[0].points[0][0], ch.movements[0].points[0][1]], {
+                    balloonContentHeader: ch.name,
                     iconContent: ch.name,
                     balloonContent: ''
                 }, {
@@ -87,6 +89,7 @@ function new_time(date)
                 {
                     //изменение описания метки
                     ch.placemark.properties.set({
+                        balloonContentHeader: ch.name,
                         iconContent: ch.name,
                         balloonContent : ch.movements[i].description
                     });
@@ -124,16 +127,31 @@ function new_time(date)
                             var y = p1[1] + (p2[1] - p1[1])*pers;
                         
                             ch.placemark.geometry.setCoordinates([x,y]);
+                            heroes.push(ch.placemark);
                             map.geoObjects.add(ch.placemark);
                         }
                     }
                 }
-
-
             }
+        });
+        
+        if(clusterer != null){
+            map.geoObjects.remove(clusterer);
+        }
 
-        })
+        clusterer = new ymaps.Clusterer({
+            preset: 'islands#invertedDarkOrangeClusterIcons',
+            groupByCoordinates: false,
+            clusterDisableClickZoom: true,
+            clusterHideIconOnBalloonOpen: false,
+            geoObjectHideIconOnBalloonOpen: false,
+            gridSize: 32,
+            clusterDisableClickZoom: true
+        });
 
+        //добавление кластеризатора
+        clusterer.add(heroes);
+        map.geoObjects.add(clusterer);
 }
 
 
@@ -210,17 +228,19 @@ function init()
             $("#log-x")[0].innerHTML = coords[0].toPrecision(6);
             $("#log-y")[0].innerHTML = coords[1].toPrecision(6);
         });
-       
+
+
+        //добавление меток городов стран и тд
         points.forEach(p => {
             var point = new ymaps.Placemark(p.chords, {
                 balloonContent: p.content
             }, {
                 preset: 'islands#darkOrangeDotIcon'
             });
-        
             map.geoObjects.add(point);
         });
-        
+
+        //отображение путей героев
         characters.forEach(ch => draw_path(ch));
 }
 
