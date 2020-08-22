@@ -1,10 +1,62 @@
+@font-face{
+
+    font-family: 'Aniron';
+    src: url('../aniron.ttf');
+
+}
+
 html, body {
     width: 100%;
     height: 100%;
     margin: 0;
     padding: 0;
 }
-
+label
+{
+    font-size: 13px;
+	font-family: Aniron;	
+}
+li
+{
+    font-size: 13px;
+	font-family: Aniron;	
+}
+div
+{
+    font-size: 13px;
+	font-family: Aniron;	
+}
+.ymaps-2-1-77-b-cluster-tabs__menu-item-text
+{
+    font-size: 10px;
+	font-family: Aniron;	
+}
+.ymaps-2-1-77-b-cluster-tabs__item-header 
+{
+    font-size: 10px;
+	font-family: Aniron;	
+}
+.ymaps-2-1-77-b-cluster-content__body 
+{
+    font-size: 10px;
+	font-family: Aniron;	
+}
+.ymaps-2-1-77-placemark__content-inner > ymaps 
+{
+    font-size: 10px;
+    margin-top: -3px;
+	font-family: Aniron;	
+}
+.ymaps-2-1-77-balloon__content> ymaps > ymaps
+{
+    font-size: 10px;
+	font-family: Aniron;	
+}
+.ymaps-2-1-77-balloon__content> ymaps > ymaps > ymaps
+{
+    font-size: 10px;
+	font-family: Aniron;	
+}
 #map{
     height: 75vh;
     width: 100vw;
