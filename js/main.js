@@ -23,6 +23,32 @@ var char_movement = {
     }
 }
 
+var curData = {
+    positions: [
+        {
+            name: "Gandalf",
+            placemark: null,
+            road: "Test",
+            point: []
+        }
+    ],
+    date: new Date(),
+    redraw: function (date) {
+        this.date = date;
+        this.positions.forEach(char => {
+            char.point = [char_movement[char.road].points[0][0], char_movement[char.road].points[0][1]];
+            if (char.point) map.geoObjects.remove(char.point);
+            let point = new ymaps.Placemark(p, {
+                balloonContent: char
+            }, {
+                preset: 'islands#nightDotIcon'
+            });
+            char.placemark = point;
+            map.geoObjects.add(point);
+        })
+    }
+}
+
 function toggle_char_visibility(char) {
     if (!char_movement[char].visible) {
         char_movement[char].visible = true;
