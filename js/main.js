@@ -1,5 +1,5 @@
 var map, zoom;
-var clusterer, curDate = new Date("3018-04-04");
+var clusterer, curDate = new Date("3018-04-16");
 
 
 function toggle_char_visibility(char) {
@@ -282,7 +282,7 @@ function init()
     //отображение путей героев
     characters.forEach(ch => draw_path(ch));
     
-    curDate = new Date("3018-04-04");
+    curDate = new Date("3018-04-16");
     new_time(curDate);
 
     if ($("#show-paths-checkbox").get(0).checked) characters.forEach(ch => { if ($('.show-path-checkbox[char="' + ch.name + '"]').get(0).checked) show_path(ch); });
@@ -325,7 +325,7 @@ function init_slider()
 {
     $("#slider-range").slider({
         range: false,
-        min: new Date("3018-04-04").getTime() / 1000,
+        min: new Date("3018-04-16").getTime() / 1000,
         max: new Date("3019-03-25").getTime() / 1000,
         step: 43200,
         values: [curDate.getTime()/1000],
