@@ -387,8 +387,16 @@ $(function(){
         min: 0,
         max: 100,
         value: 100,
-        slide: function( event, ui ) {
+        change: function( event, ui ) {
           $(".tab-wrapper-inner").css({"margin-top": "-" + (100 - ui.value) * 2 + "px"})
+        },
+        slide: function( event, ui ) {
+            $(".tab-wrapper-inner").css({"margin-top": "-" + (100 - ui.value) * 2 + "px"})
         }
-      });
+    });
+
+    $("#tabs").on("wheel", function (e) {
+        e.preventDefault();
+        $("#slider-vertical").slider("value", $("#slider-vertical").slider("value") + e.originalEvent.deltaY / -1.5)
+    });
 });
