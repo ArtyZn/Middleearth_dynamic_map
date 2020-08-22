@@ -46,15 +46,24 @@ function draw_path(ch) {
         strokeWidth: 5
     });
     ch.pathGeo = myGeoObject;
-    show_path(ch);
+    hide_path(ch);
+    map.geoObjects.add(ch.pathGeo);
 }
 
 function hide_path(ch) {
-    map.geoObjects.remove(ch.pathGeo);
+    ch.pathGeo.options.set({visible: false});
 }
 
 function show_path(ch) {
-    map.geoObjects.add(ch.pathGeo);
+    ch.pathGeo.options.set({visible: true});
+}
+
+function hide_char(ch) {
+    ch.placemark.options.set({visible: false});
+}
+
+function show_char(ch) {
+    ch.placemark.options.set({visible: true});
 }
 
 var clusterer;
@@ -71,7 +80,8 @@ function new_time(date)
                     iconContent: ch.name,
                     balloonContent: ''
                 }, {
-                    preset: 'islands#darkOrangeStretchyIcon'
+                    preset: 'islands#darkOrangeStretchyIcon',
+                    visible: false
                 });
             }
             for(var i = 0; i < ch.movements.length; i++)
@@ -241,15 +251,10 @@ function init()
     //отображение путей героев
     characters.forEach(ch => draw_path(ch));
     
-    if ($("#show-paths-checkbox").get(0).checked) characters.forEach(ch => show_path(ch)); else characters.forEach(ch => hide_path(ch));
+    new_time(new Date(3018, 1, 1).getTime());
 
-    characters.forEach(ch => {
-        if ($('.show-path-checkbox[char="' + ch.name + '"]').get(0).checked) {
-            show_path(ch);
-        } else {
-            hide_path(ch);
-        }
-    });
+    if ($("#show-paths-checkbox").get(0).checked) characters.forEach(ch => { if ($('.show-path-checkbox[char="' + ch.name + '"]').get(0).checked) show_path(ch); });
+    if ($("#show-chars-checkbox").get(0).checked) characters.forEach(ch => { if ($('.show-char-checkbox[char="' + ch.name + '"]').get(0).checked) show_char(ch); });
 }
 
 
@@ -269,7 +274,18 @@ $(function(){
     });
     $("#tabs").tabs();
     $("#show-paths-checkbox").on("change", function (e) {
-        if ($("#show-paths-checkbox").get(0).checked) characters.forEach(ch => show_path(ch)); else characters.forEach(ch => hide_path(ch));
+        if ($("#show-paths-checkbox").get(0).checked) {
+            characters.forEach(ch => { if ($('.show-path-checkbox[char="' + ch.name + '"]').get(0).checked) show_path(ch); });
+        } else {
+            characters.forEach(ch => hide_path(ch));
+        } 
+    });
+    $("#show-chars-checkbox").on("change", function (e) {
+        if ($("#show-chars-checkbox").get(0).checked) {
+            characters.forEach(ch => { if ($('.show-char-checkbox[char="' + ch.name + '"]').get(0).checked) show_char(ch); });
+        } else {
+            characters.forEach(ch => hide_char(ch));
+        } 
     });
     $(".show-path-checkbox").on("change", function (e) {
         characters.forEach(ch => {
@@ -281,5 +297,16 @@ $(function(){
                 }
             }
         });
-    })
+    });
+    $(".show-char-checkbox").on("change", function (e) {
+        characters.forEach(ch => {
+            if (e.target.attributes.getNamedItem("char").value == ch.name) {
+                if (e.target.checked) {
+                    show_char(ch)
+                } else {
+                    hide_char(ch);
+                }
+            }
+        });
+    });
 });
