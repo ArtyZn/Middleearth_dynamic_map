@@ -249,7 +249,7 @@ function init()
             hide_path(ch);
         }
     });
-}
+});
 
 $(function(){
     $(".js-example-basic-multiple").select2();
