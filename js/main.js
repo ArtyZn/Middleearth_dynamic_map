@@ -22,20 +22,6 @@ function toggle_char_visibility(char) {
     }
 }
 
-$(document).ready(function() {
-    $( "#slider-range" ).slider({
-        range: false,
-        min: new Date(3018, 0, 1).getTime() / 1000,
-        max: new Date(3019, 2, 25).getTime() / 1000,
-        step: 86400,
-        values: [ new Date(3018, 1, 1).getTime() / 1000],
-        slide: function( event, ui ) {
-            $( "#cur-date" )[0].innerHTML = new Date(ui.values[ 0 ] *1000).toDateString();
-            new_time(new Date(ui.values[ 0 ] *1000));
-        }
-    });
-    $( "#amount" ).val( (new Date($( "#slider-range" ).slider( "values", 0 )*1000).toDateString()));
-});
 function getDistance(p1, p2)
 {
     return Math.sqrt((p1[0] - p2[0])*(p1[0] - p2[0]) + (p1[1] - p2[1])*(p1[1] - p2[1]));
@@ -59,9 +45,17 @@ function draw_path(ch) {
         // Ширина линии.
         strokeWidth: 5
     });
-    map.geoObjects.add(myGeoObject);
+    ch.pathGeo = myGeoObject;
+    show_path(ch);
 }
 
+function hide_path(ch) {
+    map.geoObjects.remove(ch.pathGeo);
+}
+
+function show_path(ch) {
+    map.geoObjects.add(ch.pathGeo);
+}
 
 function new_time(date)
 {
@@ -135,8 +129,6 @@ function new_time(date)
         })
 
 }
-
-
 
 function init()
 {
@@ -233,4 +225,27 @@ function init()
 $(function(){
     $(".js-example-basic-multiple").select2();
     ymaps.ready(init);
+
+    $("#slider-range").slider({
+        range: false,
+        min: new Date(3018, 0, 1).getTime() / 1000,
+        max: new Date(3019, 2, 25).getTime() / 1000,
+        step: 86400,
+        values: [ new Date(3018, 1, 1).getTime() / 1000],
+        slide: function( event, ui ) {
+            $( "#cur-date" )[0].innerHTML = new Date(ui.values[ 0 ] *1000).toDateString();
+            new_time(new Date(ui.values[ 0 ] *1000));
+        }
+    });
+    $("#tabs").tabs();
+    $("#show-paths-checkbox").on("change", function (e) {
+        characters.forEach(ch => hide_path(ch));
+    });
+    /*
+    characters.forEach(ch => {
+        if ($('.show-path-checkbox[char="' + ch.name + '"]').get(0).checked) {
+            show_path(ch);
+        }
+    });
+    */
 });
