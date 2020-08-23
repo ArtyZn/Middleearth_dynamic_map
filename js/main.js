@@ -77,7 +77,7 @@ function new_time(date)
     //var heroes = [];
     characters.forEach(ch =>
     {
-    
+       
         if(ch.placemark == null)
         {
             ch.placemark =  new ymaps.Placemark([ch.movements[0].points[0][0], ch.movements[0].points[0][1]], {
@@ -89,6 +89,7 @@ function new_time(date)
                 visible: false
             });
         }
+        map.geoObjects.remove(ch.placemark);
         for(var i = 0; i < ch.movements.length; i++)
         {
             var start = new Date(ch.movements[i].start);
@@ -443,7 +444,7 @@ $(function(){
             else
                 mrg = 0;
             if (mrg + e.originalEvent.deltaY / Math.abs(e.originalEvent.deltaY) * -1 < 0)
-                $($(".log").get(0)).css("margin-top", (mrg + e.originalEvent.deltaY / Math.abs(e.originalEvent.deltaY) * -5) + "px");
+                $($(".log").get(0)).css("margin-top", (mrg + e.originalEvent.deltaY / Math.abs(e.originalEvent.deltaY) * -15) + "px");
         }
     });
 });
