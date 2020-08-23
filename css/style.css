@@ -141,8 +141,9 @@ div
 }
 
 .date {
-    color: orange;
+    color: DodgerBlue;
     font-weight: 900;
+    font-size: 1.2em;
 }
 
 .tab-wrapper-inner > label {

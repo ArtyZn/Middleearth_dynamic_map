@@ -69,10 +69,10 @@ function show_char(ch) {
     new_time(curDate);
 }
 
-
+var months = ['Послеюль', 'Солмат', 'Рете', 'Астрон', 'Тримидж', 'Передлит', 'Послелит', 'Вэдмат', 'Халимит', 'Винтерфилт', 'Бломат', 'Передюль'];
 function new_time(date)
 {
-    $( "#cur-date" )[0].innerHTML = date.getFullYear() +"-" + (date.getMonth()+1)+ "-" + date.getDate();
+    $( "#cur-date" )[0].innerHTML = date.getFullYear() + " " + months[date.getMonth()] + "-" + date.getDate();
 
     //var heroes = [];
     characters.forEach(ch =>
@@ -154,7 +154,7 @@ function new_time(date)
     events.forEach(e => {
         if (e.start < dateObj) {
             if (!$('.log[desc="' + e.event + '"]').length)
-                $('#event-log').append(`<div class="log" desc="${e.event}"><span class="date">${e.start.getFullYear() +"-" + (e.start.getMonth()+1)+ "-" + e.start.getDate()}</span>: ${e.event}</div>`);
+                $('#event-log').append(`<div class="log" desc="${e.event}"><span class="date">${e.start.getFullYear() +" " + months[e.start.getMonth()]+ "-" + e.start.getDate()}</span>: ${e.event}</div>`);
         } else if (e.start > dateObj) {
             if ($('.log[desc="' + e.event + '"]').length)
                 $('.log[desc="' + e.event + '"]').get(0).remove();
