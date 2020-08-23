@@ -343,6 +343,10 @@ function init_slider()
 
 $(function(){
     $(".js-example-basic-multiple").select2();
+    characters.forEach(ch => {
+        $("#tabs-2 > .tab-wrapper-inner").get(0).innerHTML += `<input type="checkbox" class="show-path-checkbox" char="${ch.name}" checked> <label>Показывать путь ${ch.name}</label><br>`;
+        $("#tabs-3 > .tab-wrapper-inner").get(0).innerHTML += `<input type="checkbox" class="show-char-checkbox" char="${ch.name}" checked> <label>Показывать ${ch.name}</label><br>`;
+    })
     ymaps.ready(init);
 
     init_slider();
@@ -354,7 +358,7 @@ $(function(){
             characters.forEach(ch => hide_path(ch));
         } 
     });
-  /*  $("#show-chars-checkbox").on("change", function (e) {
+    $("#show-chars-checkbox").on("change", function (e) {
         if ($("#show-chars-checkbox").get(0).checked) {
             characters.forEach(ch => { if ($('.show-char-checkbox[char="' + ch.name + '"]').get(0).checked) show_char(ch); });
         } else {
@@ -382,7 +386,7 @@ $(function(){
                 }
             }
         });
-    });*/
+    });
 
     $("#slider-vertical").slider({
         orientation: "vertical",
