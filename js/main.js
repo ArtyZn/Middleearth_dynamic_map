@@ -414,20 +414,20 @@ $(function(){
 
     $("#tabs").on("wheel", function (e) {
         e.preventDefault();
-        $("#slider-vertical").slider("value", $("#slider-vertical").slider("value") + e.originalEvent.deltaY / -1.5)
+
+        $("#slider-vertical").slider("value", $("#slider-vertical").slider("value") + e.originalEvent.deltaY / Math.abs(e.originalEvent.deltaY) * -2)
     });
 
     $("#event-log").on("wheel", function (e) {
         e.preventDefault();
-        
         if ($(".log").length > 0) {
             var mrg;
             if ($($(".log").get(0)).css("margin-top"))
                 mrg = $($(".log").get(0)).css("margin-top").slice(0, $($(".log").get(0)).css("margin-top").length - 2) - 0; // "-0" - лучший способ преобразовать строку в число
             else
                 mrg = 0;
-            if (mrg + e.originalEvent.deltaY / -3 < 0)
-                $($(".log").get(0)).css("margin-top", (mrg + e.originalEvent.deltaY / -3 * 5) + "px");
+            if (mrg + e.originalEvent.deltaY / Math.abs(e.originalEvent.deltaY) * -1 < 0)
+                $($(".log").get(0)).css("margin-top", (mrg + e.originalEvent.deltaY / Math.abs(e.originalEvent.deltaY) * -5) + "px");
         }
     });
 });
