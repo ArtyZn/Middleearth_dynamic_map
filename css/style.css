@@ -21,6 +21,11 @@ li
     font-size: 13px;
 	font-family: Aniron;	
 }
+button
+{
+    font-size: 1px;
+	font-family: Aniron;	
+}
 div
 {
     font-size: 13px;
@@ -106,8 +111,8 @@ div
 }
 
 #toggle-time {
-    width: 11em;
-    font-size: 1em;
+    width: 18em;
+    font-size: 10px;
 }
 
 #bottom-panel {
