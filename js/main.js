@@ -45,7 +45,7 @@ function draw_path(ch) {
         strokeWidth: 5
     });
     ch.pathGeo = myGeoObject;
-    hide_path(ch);
+    //hide_path(ch);
     map.geoObjects.add(ch.pathGeo);
 }
 
