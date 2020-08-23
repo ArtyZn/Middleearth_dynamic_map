@@ -1,4 +1,4 @@
-var map, zoom;
+var map, zoom, tabHeight;
 var clusterer, curDate = new Date("3018-04-16");
 
 
@@ -293,11 +293,12 @@ function init()
     
     curDate = new Date("3018-04-16");
     new_time(curDate);
-    characters.forEach(ch => {
-        show_path(ch);
-    });
-    //if ($("#show-paths-checkbox").get(0).checked) characters.forEach(ch => { if ($('.show-path-checkbox[char="' + ch.name + '"]').get(0).checked) show_path(ch); });
-    //if ($("#show-chars-checkbox").get(0).checked) characters.forEach(ch => { if ($('.show-char-checkbox[char="' + ch.name + '"]').get(0).checked) show_char(ch); });
+    /*characters.forEach(ch => {
+    show_path(ch)
+    show_char(ch)
+    });*/
+   if ($("#show-paths-checkbox").get(0).checked) characters.forEach(ch => { if ($('.show-path-checkbox[char="' + ch.name + '"]').get(0).checked) show_path(ch); });
+    if ($("#show-chars-checkbox").get(0).checked) characters.forEach(ch => { if ($('.show-char-checkbox[char="' + ch.name + '"]').get(0).checked) show_char(ch); });
 }
 
 function createPreset(zoom){
@@ -315,24 +316,45 @@ function createBalloonContent(zoom, content){
 
 
 var started = false;
-var interval;
+var intervalFast;
+var intervalSlow;
 function startTime()
 {
     if(started)
          stopTime();
 
-    interval = setInterval(function() {
+         
+        intervalFast= setInterval(function() {
         curDate = new Date(curDate.getTime() +4320000 );
         new_time(curDate);
+        check();
         //init_slider();
       }, 40);
       started = true;
 }
 
+function check()
+{
+    //alert("AAAAAA");
+    if(curDate.getTime()>(new Date("3019-02-25")).getTime() && intervalFast!=null)
+    {
+        stopTime();
+        //alert("AAAAAA");
+        intervalSlow = setInterval(function() {
+            curDate = new Date(curDate.getTime() +4320000/2 );
+            new_time(curDate);
+            //init_slider();
+          }, 40);
+          started = true;
+    }
+}
 function stopTime()
 {
     started = false;
-    clearInterval(interval);
+    clearInterval(intervalFast);
+    intervalFast = null;
+    clearInterval(intervalSlow);
+    intervalSlow = null;
 }
 
 function init_slider()
@@ -358,13 +380,15 @@ $(function(){
         $("#tabs-2 > .tab-wrapper-inner").get(0).innerHTML += `<input type="checkbox" class="show-path-checkbox" char="${ch.name}" checked> <label>Показывать путь ${ch.name}</label><br>`;
         $("#tabs-3 > .tab-wrapper-inner").get(0).innerHTML += `<input type="checkbox" class="show-char-checkbox" char="${ch.name}" checked> <label>Показывать ${ch.name}</label><br>`;
     })
+    console.log($('#tabs-2').get(0));
+    tabHeight = $('#tabs-2').height();
     ymaps.ready(init);
 
     init_slider();
     $("#tabs").tabs();
     $("#show-paths-checkbox").on("change", function (e) {
         if ($("#show-paths-checkbox").get(0).checked) {
-          // characters.forEach(ch => { if ($('.show-path-checkbox[char="' + ch.name + '"]').get(0).checked) show_path(ch); });
+           characters.forEach(ch => { if ($('.show-path-checkbox[char="' + ch.name + '"]').get(0).checked) show_path(ch); });
         } else {
             characters.forEach(ch => hide_path(ch));
         } 
@@ -406,10 +430,10 @@ $(function(){
         max: 100,
         value: 100,
         change: function( event, ui ) {
-          $(".tab-wrapper-inner").css({"margin-top": "-" + (100 - ui.value) * 2 + "px"})
+            $(".tab-wrapper-inner").css({"margin-top": "-" + (100 - ui.value) * (tabHeight / 100) + "px"})
         },
         slide: function( event, ui ) {
-            $(".tab-wrapper-inner").css({"margin-top": "-" + (100 - ui.value) * 2 + "px"})
+            $(".tab-wrapper-inner").css({"margin-top": "-" + (100 - ui.value) * (tabHeight / 100) + "px"})
         }
     });
 
