@@ -187,7 +187,7 @@ function init()
 
     var LAYER_NAME = 'user#layer',
     MAP_TYPE_NAME = 'user#customMap',
-    TILES_PATH = 'images\\tiles',
+    TILES_PATH = 'images/tiles',
 
 
     MAX_ZOOM = 23,
