@@ -69,8 +69,16 @@ div
 
 #map-log {
     position: absolute;
-    bottom: 0;
+    top: 0;
     left: 0;
+    z-index: 20;
+}
+
+#event-log {
+    height: 20vh;
+    width: 100%;
+    overflow: hidden;
+
 }
 
 #map-log > span {
@@ -102,11 +110,6 @@ div
     font-size: 1em;
 }
 
-#cur-date {
-    color: orange;
-    font-weight: 900;
-}
-
 #bottom-panel {
     display: flex;
     overflow: hidden;
@@ -126,4 +129,18 @@ div
 
 .gui-tab {
     overflow: hidden;
+}
+
+#slider-vertical {
+    position: absolute; 
+    height: auto; 
+    top: 42px; 
+    bottom: 9px; 
+    margin-top: 4px;
+    margin-left: 4px;
+}
+
+.date {
+    color: orange;
+    font-weight: 900;
 }
