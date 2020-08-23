@@ -74,7 +74,7 @@ function new_time(date)
 {
 
 
-  $( "#cur-date" )[0].innerHTML = date.getFullYear() +"-" + date.getMonth()+ "-" + date.getDate();
+  $( "#cur-date" )[0].innerHTML = date.getFullYear() +"-" + (date.getMonth()+1)+ "-" + date.getDate();
   //$( "#cur-date" )[0].innerHTML = date;
     var heroes = [];
     characters.forEach(ch =>
@@ -97,7 +97,7 @@ function new_time(date)
                 var end =  new Date(ch.movements[i].end);
                // alert(start +"  " + date+ " " + end);
                 
-                if(start.getTime() <= date.getTime() &&  date.getTime() <=  end.getTime())
+                if(start.getTime() < date.getTime() &&  date.getTime() <=  end.getTime())
                 {
                     //изменение описания метки
                     ch.placemark.properties.set({
@@ -284,9 +284,12 @@ function init()
     
     curDate = new Date("3018-04-16");
     new_time(curDate);
-
-    if ($("#show-paths-checkbox").get(0).checked) characters.forEach(ch => { if ($('.show-path-checkbox[char="' + ch.name + '"]').get(0).checked) show_path(ch); });
-    if ($("#show-chars-checkbox").get(0).checked) characters.forEach(ch => { if ($('.show-char-checkbox[char="' + ch.name + '"]').get(0).checked) show_char(ch); });
+    characters.forEach(ch => {
+    show_path(ch)
+    show_char(ch)
+    });
+   // if ($("#show-paths-checkbox").get(0).checked) characters.forEach(ch => { if ($('.show-path-checkbox[char="' + ch.name + '"]').get(0).checked) show_path(ch); });
+    //if ($("#show-chars-checkbox").get(0).checked) characters.forEach(ch => { if ($('.show-char-checkbox[char="' + ch.name + '"]').get(0).checked) show_char(ch); });
 }
 
 function createPreset(zoom){
@@ -309,10 +312,10 @@ function startTime()
          stopTime()
 
     interval = setInterval(function() {
-        curDate = new Date(curDate.getTime() + 1000000);
+        curDate = new Date(curDate.getTime() +4320000 );
         new_time(curDate);
         //init_slider();
-      }, 10);
+      }, 40);
       started = true;
 }
 function stopTime()
@@ -346,12 +349,12 @@ $(function(){
     $("#tabs").tabs();
     $("#show-paths-checkbox").on("change", function (e) {
         if ($("#show-paths-checkbox").get(0).checked) {
-            characters.forEach(ch => { if ($('.show-path-checkbox[char="' + ch.name + '"]').get(0).checked) show_path(ch); });
+          // characters.forEach(ch => { if ($('.show-path-checkbox[char="' + ch.name + '"]').get(0).checked) show_path(ch); });
         } else {
             characters.forEach(ch => hide_path(ch));
         } 
     });
-    $("#show-chars-checkbox").on("change", function (e) {
+  /*  $("#show-chars-checkbox").on("change", function (e) {
         if ($("#show-chars-checkbox").get(0).checked) {
             characters.forEach(ch => { if ($('.show-char-checkbox[char="' + ch.name + '"]').get(0).checked) show_char(ch); });
         } else {
@@ -379,7 +382,7 @@ $(function(){
                 }
             }
         });
-    });
+    });*/
 
     $("#slider-vertical").slider({
         orientation: "vertical",
