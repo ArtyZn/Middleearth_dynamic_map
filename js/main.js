@@ -316,47 +316,29 @@ function createBalloonContent(zoom, content){
     return null;
 }
 
+var time_running = false;
+var speed = 1;
 
-var started = false;
-var intervalFast;
-var intervalSlow;
-function startTime()
-{
-    if(started)
-         stopTime();
-
-         
-        intervalFast= setInterval(function() {
-        curDate = new Date(curDate.getTime() +4320000 );
-        new_time(curDate);
-        check();
-        //init_slider();
-      }, 40);
-      started = true;
-}
-
-function check()
-{
-    //alert("AAAAAA");
-    if(curDate.getTime()>(new Date("3019-02-25")).getTime() && intervalFast!=null)
-    {
-        stopTime();
-        //alert("AAAAAA");
-        intervalSlow = setInterval(function() {
-            curDate = new Date(curDate.getTime() +4320000/2 );
-            new_time(curDate);
-            //init_slider();
-          }, 40);
-          started = true;
+function tick_time() {
+    if (time_running) {
+        $("#slider-range").slider("value", $("#slider-range").slider("value") + 43200);
+        setTimeout(tick_time, 60 / speed);
     }
 }
-function stopTime()
-{
-    started = false;
-    clearInterval(intervalFast);
-    intervalFast = null;
-    clearInterval(intervalSlow);
-    intervalSlow = null;
+
+function toggle_time() {
+    if (time_running) {
+        time_running = false;
+    } else {
+        time_running = true;
+        tick_time();
+    }
+}
+
+function correct_speed() {
+    if (curDate.getTime() > 0 && curDate.getTime() < 0) {
+
+    }
 }
 
 function init_slider()
@@ -366,13 +348,20 @@ function init_slider()
         min: new Date("3018-04-16").getTime() / 1000,
         max: new Date("3019-03-25").getTime() / 1000,
         step: 43200,
-        values: [curDate.getTime()/1000],
+        value: curDate.getTime()/1000,
         slide: function( event, ui ) {
-            var date = new Date(ui.values[ 0 ] *1000);
+            var date = new Date(ui.value * 1000);
                        
-            curDate = new Date(ui.values[ 0 ] *1000);
+            curDate = new Date(ui.value * 1000);
             new_time(curDate);
-        }
+        },
+        change: function( event, ui ) {
+            var date = new Date(ui.value * 1000);
+                       
+            curDate = new Date(ui.value * 1000);
+            new_time(curDate);
+        },
+
     });
 }
 
