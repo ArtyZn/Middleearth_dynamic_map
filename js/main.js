@@ -74,7 +74,7 @@ function new_time(date)
 {
     $( "#cur-date" )[0].innerHTML = date.getFullYear() +"-" + (date.getMonth()+1)+ "-" + date.getDate();
 
-    var heroes = [];
+    //var heroes = [];
     characters.forEach(ch =>
     {
     
@@ -137,9 +137,10 @@ function new_time(date)
                         var y = p1[1] + (p2[1] - p1[1])*pers;
                     
                         ch.placemark.geometry.setCoordinates([x,y]);
+                        /*
                         if(ch.hidden == false) {
                             heroes.push(ch.placemark);
-                        }
+                        }*/
 
                         map.geoObjects.add(ch.placemark);
                     }
@@ -173,10 +174,11 @@ function new_time(date)
         gridSize: 32,
         clusterDisableClickZoom: true
     });
-*/
+
     //добавление кластеризатора
     clusterer.add(heroes);
     map.geoObjects.add(clusterer);
+    */
 }
 
 function init()
