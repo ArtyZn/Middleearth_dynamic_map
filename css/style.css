@@ -102,7 +102,7 @@ div
 }
 
 #slider-wrapper {
-    padding-top: 5px;
+    padding: .25em 1em 0 1em;
 }
 
 #toggle-time {
@@ -143,4 +143,8 @@ div
 .date {
     color: orange;
     font-weight: 900;
+}
+
+.tab-wrapper-inner > label {
+    font-size: 1em;
 }

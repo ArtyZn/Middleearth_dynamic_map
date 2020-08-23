@@ -1,4 +1,4 @@
-var map, zoom;
+var map, zoom, tabHeight;
 var clusterer, curDate = new Date("3018-04-16");
 
 
@@ -357,6 +357,8 @@ $(function(){
         $("#tabs-2 > .tab-wrapper-inner").get(0).innerHTML += `<input type="checkbox" class="show-path-checkbox" char="${ch.name}" checked> <label>Показывать путь ${ch.name}</label><br>`;
         $("#tabs-3 > .tab-wrapper-inner").get(0).innerHTML += `<input type="checkbox" class="show-char-checkbox" char="${ch.name}" checked> <label>Показывать ${ch.name}</label><br>`;
     })
+    console.log($('#tabs-2').get(0));
+    tabHeight = $('#tabs-2').height();
     ymaps.ready(init);
 
     init_slider();
@@ -405,10 +407,10 @@ $(function(){
         max: 100,
         value: 100,
         change: function( event, ui ) {
-          $(".tab-wrapper-inner").css({"margin-top": "-" + (100 - ui.value) * 2 + "px"})
+            $(".tab-wrapper-inner").css({"margin-top": "-" + (100 - ui.value) * (tabHeight / 100) + "px"})
         },
         slide: function( event, ui ) {
-            $(".tab-wrapper-inner").css({"margin-top": "-" + (100 - ui.value) * 2 + "px"})
+            $(".tab-wrapper-inner").css({"margin-top": "-" + (100 - ui.value) * (tabHeight / 100) + "px"})
         }
     });
 
