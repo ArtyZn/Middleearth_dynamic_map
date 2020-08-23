@@ -288,7 +288,9 @@ function init()
         }
         
         points.forEach(p => {
-            p.placemark.balloon.close();
+            if(zoom > 21){
+                p.placemark.balloon.close();
+            }
             p.placemark.options.set({
                 preset: createPreset(zoom)
             });
