@@ -152,7 +152,7 @@ function new_time(date)
     events.forEach(e => {
         if (e.start < dateObj) {
             if (!$('.log[desc="' + e.event + '"]').length)
-                $('#event-log').append(`<div class="log" desc="${e.event}">${e.event}</div>`);
+                $('#event-log').append(`<div class="log" desc="${e.event}"><span class="date">${e.start.getFullYear() +"-" + (e.start.getMonth()+1)+ "-" + e.start.getDate()}</span>: ${e.event}</div>`);
         } else if (e.start > dateObj) {
             if ($('.log[desc="' + e.event + '"]').length)
                 $('.log[desc="' + e.event + '"]').get(0).remove();

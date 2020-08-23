@@ -110,11 +110,6 @@ div
     font-size: 1em;
 }
 
-#cur-date {
-    color: orange;
-    font-weight: 900;
-}
-
 #bottom-panel {
     display: flex;
     overflow: hidden;
@@ -143,4 +138,9 @@ div
     bottom: 9px; 
     margin-top: 4px;
     margin-left: 4px;
+}
+
+.date {
+    color: orange;
+    font-weight: 900;
 }
