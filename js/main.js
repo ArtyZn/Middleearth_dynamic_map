@@ -153,11 +153,24 @@ function new_time(date)
     dateObj = new Date(date);
     events.forEach(e => {
         if (e.start < dateObj) {
-            if (!$('.log[desc="' + e.event + '"]').length)
+            if (!$('.log[desc="' + e.event + '"]').length) {
                 $('#event-log').append(`<div class="log" desc="${e.event}"><span class="date">${e.start.getFullYear() +"-" + (e.start.getMonth()+1)+ "-" + e.start.getDate()}</span>: ${e.event}</div>`);
+                var log_height = $($(".log").get(0)).height();
+                console.log(log_height);
+                if ($("#event-log").get(0).clientHeight < log_height * $("#event-log").children().length) {
+                    $($(".log").get(0)).css("margin-top", "-" + (log_height * $("#event-log").children().length - $("#event-log").get(0).clientHeight) + "px");
+                }
+            }
         } else if (e.start > dateObj) {
-            if ($('.log[desc="' + e.event + '"]').length)
+            if ($('.log[desc="' + e.event + '"]').length) {
                 $('.log[desc="' + e.event + '"]').get(0).remove();
+                var log_height = $($(".log").get(0)).height();
+                console.log(log_height);
+                if ($("#event-log").get(0).clientHeight < log_height * $("#event-log").children().length) {
+                    $($(".log").get(0)).css("margin-top", "-" + (log_height * $("#event-log").children().length - $("#event-log").get(0).clientHeight) + "px");
+                }
+            }
+               
         }
     });
 
@@ -324,7 +337,7 @@ function tick_time() {
     if (time_running) {
         $("#slider-range").slider("value", $("#slider-range").slider("value") + 7200 * speed);
         correct_speed();
-        setTimeout(tick_time, 10);
+        window.requestAnimationFrame(function () {setTimeout(tick_time, 10)});
     }
 }
 
@@ -376,7 +389,6 @@ $(function(){
         $("#tabs-2 > .tab-wrapper-inner").get(0).innerHTML += `<input type="checkbox" class="show-path-checkbox" char="${ch.name}" checked> <label>Показывать путь ${ch.name}</label><br>`;
         $("#tabs-3 > .tab-wrapper-inner").get(0).innerHTML += `<input type="checkbox" class="show-char-checkbox" char="${ch.name}" checked> <label>Показывать ${ch.name}</label><br>`;
     })
-    console.log($('#tabs-2').get(0));
     tabHeight = $('#tabs-2').height();
     ymaps.ready(init);
 
