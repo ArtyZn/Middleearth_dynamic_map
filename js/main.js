@@ -1,27 +1,8 @@
 var map, zoom, tabHeight;
 var clusterer, curDate = new Date("3018-04-16");
-
-
-function toggle_char_visibility(char) {
-    if (!char_movement[char].visible) {
-        char_movement[char].visible = true;
-        char_movement[char].points.forEach(p => {
-            let point = new ymaps.Placemark(p, {
-                balloonContent: char
-            }, {
-                preset: 'islands#darkBlueDotIcon'
-            });
-            char_movement[char].placemarks.push(point);
-            map.geoObjects.add(point);
-        });
-    } else {
-        char_movement[char].visible = false;
-        char_movement[char].placemarks.forEach(p => {
-            map.geoObjects.remove(p);
-        });
-        char_movement[char].placemarks = [];
-    }
-}
+var months = ['Послеюль', 'Солмат', 'Рете', 'Астрон', 'Тримидж', 'Передлит', 'Послелит', 'Вэдмат', 'Халимит', 'Винтерфилт', 'Бломат', 'Передюль'];
+var time_running = false;
+var speed = 1;
 
 function getDistance(p1, p2)
 {
@@ -45,7 +26,6 @@ function draw_path(ch) {
         strokeWidth: 5
     });
     ch.pathGeo = myGeoObject;
-    //hide_path(ch);
     map.geoObjects.add(ch.pathGeo);
 }
 
@@ -68,20 +48,84 @@ function show_char(ch) {
     ch.hidden = false;
     new_time(curDate);
 }
+
 function show_location(p){
     p.placemark.options.set({visible: true});
 }
+
 function hide_location(p){
     p.placemark.options.set({visible: false});
 }
 
+function createPreset(zoom){
+    if(zoom <= 21) return 'islands#lightBlueCircleDotIcon';
+    return 'islands#lightBlueStretchyIcon';
+}
 
-var months = ['Послеюль', 'Солмат', 'Рете', 'Астрон', 'Тримидж', 'Передлит', 'Послелит', 'Вэдмат', 'Халимит', 'Винтерфилт', 'Бломат', 'Передюль'];
+function createIconContent(zoom, content){
+    if(zoom <= 21) return null;
+    return content;
+}
+
+function createBalloonContent(zoom, content){
+    if(zoom <= 21) return content;
+    return null;
+}
+
+function tick_time() {
+    if (time_running) {
+        $("#slider-range").slider("value", $("#slider-range").slider("value") + 7200 * speed);
+        correct_speed();
+        window.requestAnimationFrame(function () {setTimeout(tick_time, 10)});
+    }
+}
+
+function toggle_time() {
+    if (time_running) {
+        $("#toggle-time").get(0).innerHTML = "Запустить время";
+        time_running = false;
+    } else {
+        $("#toggle-time").get(0).innerHTML = "Остановить время";
+        time_running = true;
+        tick_time();
+    }
+}
+
+function correct_speed() {
+    if (curDate.getTime() > 33108004800000) {
+        speed = 0.125;
+    } else {
+        speed = 1;
+    }
+}
+
+function init_slider()
+{
+    $("#slider-range").slider({
+        range: false,
+        min: new Date("3018-04-16").getTime() / 1000,
+        max: new Date("3019-03-25").getTime() / 1000,
+        value: curDate.getTime()/1000,
+        slide: function( event, ui ) {
+            var date = new Date(ui.value * 1000);
+                       
+            curDate = new Date(ui.value * 1000);
+            new_time(curDate);
+        },
+        change: function( event, ui ) {
+            var date = new Date(ui.value * 1000);
+                       
+            curDate = new Date(ui.value * 1000);
+            new_time(curDate);
+        },
+
+    });
+}
+
 function new_time(date)
 {
     $( "#cur-date" )[0].innerHTML = date.getFullYear() + " " + months[date.getMonth()] + "-" + date.getDate();
 
-    //var heroes = [];
     characters.forEach(ch =>
     {
        
@@ -101,7 +145,6 @@ function new_time(date)
         {
             var start = new Date(ch.movements[i].start);
             var end =  new Date(ch.movements[i].end);
-            // alert(start +"  " + date+ " " + end);
             
             if(start.getTime() < date.getTime() &&  date.getTime() <=  end.getTime())
             {
@@ -133,22 +176,15 @@ function new_time(date)
                     p2 = ch.movements[i].points[j+1];
                     prev =  curDist;
                     curDist += getDistance(p1, p2);
-                    //alert(prev + " " + dist +"  " + curDist )
                     if(prev<=dist && dist<= curDist)
                     {
                         var a = dist - prev;
                         var b = curDist - prev;
                         var pers = a * 1.0 / b;
-                        //alert(pers);
-                        // alert(p1 + " " + p2 + "  " + pers);
                         var x = p1[0] + (p2[0] - p1[0])*pers;
                         var y = p1[1] + (p2[1] - p1[1])*pers;
                     
                         ch.placemark.geometry.setCoordinates([x,y]);
-                        /*
-                        if(ch.hidden == false) {
-                            heroes.push(ch.placemark);
-                        }*/
 
                         map.geoObjects.add(ch.placemark);
                     }
@@ -163,7 +199,6 @@ function new_time(date)
             if (!$('.log[desc="' + e.event + '"]').length) {
                 $('#event-log').append(`<div class="log" desc="${e.event}"><span class="date">${e.start.getFullYear() +"-" + (e.start.getMonth()+1)+ "-" + e.start.getDate()}</span>: ${e.event}</div>`);
                 var log_height = $($(".log").get(0)).height();
-                console.log(log_height);
                 if ($("#event-log").get(0).clientHeight < log_height * $("#event-log").children().length) {
                     $($(".log").get(0)).css("margin-top", "-" + (log_height * $("#event-log").children().length - $("#event-log").get(0).clientHeight + 5) + "px");
                 }
@@ -172,7 +207,6 @@ function new_time(date)
             if ($('.log[desc="' + e.event + '"]').length) {
                 $('.log[desc="' + e.event + '"]').get(0).remove();
                 var log_height = $($(".log").get(0)).height();
-                console.log(log_height);
                 if ($("#event-log").get(0).clientHeight < log_height * $("#event-log").children().length) {
                     $($(".log").get(0)).css("margin-top", "-" + (log_height * $("#event-log").children().length - $("#event-log").get(0).clientHeight + 5) + "px");
                 }
@@ -180,31 +214,10 @@ function new_time(date)
                
         }
     });
-
-    /* 
-    if(clusterer != null){
-        map.geoObjects.remove(clusterer);
-    }
-
-    clusterer = new ymaps.Clusterer({
-        preset: 'islands#invertedDarkOrangeClusterIcons',
-        groupByCoordinates: false,
-        clusterDisableClickZoom: true,
-        clusterHideIconOnBalloonOpen: false,
-        geoObjectHideIconOnBalloonOpen: false,
-        gridSize: 32,
-        clusterDisableClickZoom: true
-    });
-
-    //добавление кластеризатора
-    clusterer.add(heroes);
-    map.geoObjects.add(clusterer);
-    */
 }
 
 function init()
 {
-
     var LAYER_NAME = 'user#layer',
     MAP_TYPE_NAME = 'user#customMap',
     TILES_PATH = 'images/tiles',
@@ -308,7 +321,6 @@ function init()
     map.events.add('click', function (e) {
         var coords = e.get('coords');
         $("#log-xy")[0].innerHTML = $("#log-xy")[0].innerHTML + "[" + coords[0].toPrecision(6) + ", " + coords[1].toPrecision(6) + "],";
-        console.log("[" + coords[0].toPrecision(6) + ", " + coords[1].toPrecision(6) + "],");
     });
 
     //отображение путей героев
@@ -324,72 +336,6 @@ function init()
     if ($("#show-chars-checkbox").get(0).checked) characters.forEach(ch => { if ($('.show-char-checkbox[char="' + ch.name + '"]').get(0).checked) show_char(ch); });
 }
 
-function createPreset(zoom){
-    if(zoom <= 21) return 'islands#lightBlueCircleDotIcon';
-    return 'islands#lightBlueStretchyIcon';
-}
-function createIconContent(zoom, content){
-    if(zoom <= 21) return null;
-    return content;
-}
-function createBalloonContent(zoom, content){
-    if(zoom <= 21) return content;
-    return null;
-}
-
-var time_running = false;
-var speed = 1;
-
-function tick_time() {
-    if (time_running) {
-        $("#slider-range").slider("value", $("#slider-range").slider("value") + 7200 * speed);
-        correct_speed();
-        window.requestAnimationFrame(function () {setTimeout(tick_time, 10)});
-    }
-}
-
-function toggle_time() {
-    if (time_running) {
-        $("#toggle-time").get(0).innerHTML = "Запустить время";
-        time_running = false;
-    } else {
-        $("#toggle-time").get(0).innerHTML = "Остановить время";
-        time_running = true;
-        tick_time();
-    }
-}
-
-function correct_speed() {
-    if (curDate.getTime() > 33108004800000) {
-        speed = 0.125;
-    } else {
-        speed = 1;
-    }
-}
-
-function init_slider()
-{
-    $("#slider-range").slider({
-        range: false,
-        min: new Date("3018-04-16").getTime() / 1000,
-        max: new Date("3019-03-25").getTime() / 1000,
-        value: curDate.getTime()/1000,
-        slide: function( event, ui ) {
-            var date = new Date(ui.value * 1000);
-                       
-            curDate = new Date(ui.value * 1000);
-            new_time(curDate);
-        },
-        change: function( event, ui ) {
-            var date = new Date(ui.value * 1000);
-                       
-            curDate = new Date(ui.value * 1000);
-            new_time(curDate);
-        },
-
-    });
-}
-
 $(function(){
     $(".js-example-basic-multiple").select2();
     characters.forEach(ch => {
@@ -398,9 +344,9 @@ $(function(){
     })
     tabHeight = $('#tabs-2').height();
     ymaps.ready(init);
-
     init_slider();
     $("#tabs").tabs();
+
     $("#show-paths-checkbox").on("change", function (e) {
         if ($("#show-paths-checkbox").get(0).checked) {
            characters.forEach(ch => { if ($('.show-path-checkbox[char="' + ch.name + '"]').get(0).checked) show_path(ch); });
@@ -408,6 +354,7 @@ $(function(){
             characters.forEach(ch => hide_path(ch));
         } 
     });
+
     $("#show-chars-checkbox").on("change", function (e) {
         if ($("#show-chars-checkbox").get(0).checked) {
             characters.forEach(ch => { if ($('.show-char-checkbox[char="' + ch.name + '"]').get(0).checked) show_char(ch); });
@@ -415,6 +362,7 @@ $(function(){
             characters.forEach(ch => hide_char(ch));
         } 
     });
+
     $("#show-locations-checkbox").on("change", function (e) {///////
         if ($("#show-locations-checkbox").get(0).checked) {
             points.forEach(p => show_location(p));
@@ -422,6 +370,7 @@ $(function(){
             points.forEach(p => hide_location(p));
         } 
     });
+
     $(".show-path-checkbox").on("change", function (e) {
         characters.forEach(ch => {
             if (e.target.attributes.getNamedItem("char").value == ch.name) {
@@ -433,6 +382,7 @@ $(function(){
             }
         });
     });
+
     $(".show-char-checkbox").on("change", function (e) {
         characters.forEach(ch => {
             if (e.target.attributes.getNamedItem("char").value == ch.name) {
