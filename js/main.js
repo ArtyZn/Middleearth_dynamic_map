@@ -68,6 +68,13 @@ function show_char(ch) {
     ch.hidden = false;
     new_time(curDate);
 }
+function show_location(p){
+    p.placemark.options.set({visible: true});
+}
+function hide_location(p){
+    p.placemark.options.set({visible: false});
+}
+
 
 var months = ['Послеюль', 'Солмат', 'Рете', 'Астрон', 'Тримидж', 'Передлит', 'Послелит', 'Вэдмат', 'Халимит', 'Винтерфилт', 'Бломат', 'Передюль'];
 function new_time(date)
@@ -394,6 +401,13 @@ $(function(){
             characters.forEach(ch => { if ($('.show-char-checkbox[char="' + ch.name + '"]').get(0).checked) show_char(ch); });
         } else {
             characters.forEach(ch => hide_char(ch));
+        } 
+    });
+    $("#show-locations-checkbox").on("change", function (e) {///////
+        if ($("#show-locations-checkbox").get(0).checked) {
+            points.forEach(p => show_location(p));
+        } else {
+            points.forEach(p => hide_location(p));
         } 
     });
     $(".show-path-checkbox").on("change", function (e) {
