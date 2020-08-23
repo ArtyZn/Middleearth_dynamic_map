@@ -72,8 +72,6 @@ function show_char(ch) {
 
 function new_time(date)
 {
-
-
   $( "#cur-date" )[0].innerHTML = date.getFullYear() +"-" + (date.getMonth()+1)+ "-" + date.getDate();
   //$( "#cur-date" )[0].innerHTML = date;
     var heroes = [];
@@ -190,7 +188,7 @@ function init()
         });
         // Указываем доступный диапазон масштабов для данного слоя.
         layer.getZoomRange = function () {
-            return ymaps.vow.resolve([1, 23]);
+            return ymaps.vow.resolve([1, 24]);
         };
         // Добавляем свои копирайты.
         layer.getCopyrights = function () {
@@ -217,7 +215,7 @@ function init()
          */
     map = new ymaps.Map('map', {
         center: [0, 0],
-        zoom: 1,
+        zoom: 19,
         controls: ['zoomControl'],
         type: MAP_TYPE_NAME
     }, {
@@ -225,7 +223,7 @@ function init()
         // Задаем в качестве проекции Декартову. При данном расчёте центр изображения будет лежать в координатах [0, 0].
         projection: new ymaps.projection.Cartesian([[PIC_HEIGHT / 2 - worldSize, -PIC_WIDTH / 2], [PIC_HEIGHT / 2, worldSize - PIC_WIDTH / 2]], [false, false]),
         // Устанавливаем область просмотра карты так, чтобы пользователь не смог выйти за пределы изображения.
-        restrictMapArea: [[-PIC_HEIGHT / 2, -PIC_WIDTH / 2], [PIC_HEIGHT / 2, PIC_WIDTH / 2]]
+        restrictMapArea: [[-PIC_HEIGHT, -PIC_WIDTH], [PIC_HEIGHT, PIC_WIDTH]]
 
         // При данном расчёте, в координатах [0, 0] будет находиться левый нижний угол изображения,
         // правый верхний будет находиться в координатах [PIC_HEIGHT, PIC_WIDTH].
@@ -240,8 +238,7 @@ function init()
         if (currentZoom != zoom) {
             zoom = currentZoom;
         }
-
-
+        
         points.forEach(p => {
             p.placemark.balloon.close();
             p.placemark.options.set({
@@ -293,23 +290,25 @@ function init()
 }
 
 function createPreset(zoom){
-    if(zoom == 21) return 'islands#lightBlueCircleDotIcon';
+    if(zoom <= 21) return 'islands#lightBlueCircleDotIcon';
     return 'islands#lightBlueStretchyIcon';
 }
 function createIconContent(zoom, content){
-    if(zoom == 21) return null;
+    if(zoom <= 21) return null;
     return content;
 }
 function createBalloonContent(zoom, content){
-    if(zoom == 21) return content;
+    if(zoom <= 21) return content;
     return null;
 }
+
+
 var started = false;
 var interval;
 function startTime()
 {
     if(started)
-         stopTime()
+         stopTime();
 
     interval = setInterval(function() {
         curDate = new Date(curDate.getTime() +4320000 );
@@ -318,6 +317,7 @@ function startTime()
       }, 40);
       started = true;
 }
+
 function stopTime()
 {
     started = false;
