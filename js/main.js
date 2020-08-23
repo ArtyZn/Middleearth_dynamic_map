@@ -150,10 +150,10 @@ function new_time(date)
     
     dateObj = new Date(date);
     events.forEach(e => {
-        if (e.start < dateObj && dateObj < e.end) {
+        if (e.start < dateObj) {
             if (!$('.log[desc="' + e.event + '"]').length)
-                $('#map-log').append(`<div class="log" desc="${e.event}">${e.event}</div>`);
-        } else if (dateObj > e.end || e.start > dateObj) {
+                $('#event-log').append(`<div class="log" desc="${e.event}">${e.event}</div>`);
+        } else if (e.start > dateObj) {
             if ($('.log[desc="' + e.event + '"]').length)
                 $('.log[desc="' + e.event + '"]').get(0).remove();
         }
@@ -415,5 +415,19 @@ $(function(){
     $("#tabs").on("wheel", function (e) {
         e.preventDefault();
         $("#slider-vertical").slider("value", $("#slider-vertical").slider("value") + e.originalEvent.deltaY / -1.5)
+    });
+
+    $("#event-log").on("wheel", function (e) {
+        e.preventDefault();
+        
+        if ($(".log").length > 0) {
+            var mrg;
+            if ($($(".log").get(0)).css("margin-top"))
+                mrg = $($(".log").get(0)).css("margin-top").slice(0, $($(".log").get(0)).css("margin-top").length - 2) - 0; // "-0" - лучший способ преобразовать строку в число
+            else
+                mrg = 0;
+            if (mrg + e.originalEvent.deltaY / -3 < 0)
+                $($(".log").get(0)).css("margin-top", (mrg + e.originalEvent.deltaY / -3 * 5) + "px");
+        }
     });
 });
