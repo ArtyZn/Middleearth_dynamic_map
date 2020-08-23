@@ -322,23 +322,28 @@ var speed = 1;
 
 function tick_time() {
     if (time_running) {
-        $("#slider-range").slider("value", $("#slider-range").slider("value") + 43200);
-        setTimeout(tick_time, 60 / speed);
+        $("#slider-range").slider("value", $("#slider-range").slider("value") + 7200 * speed);
+        correct_speed();
+        setTimeout(tick_time, 10);
     }
 }
 
 function toggle_time() {
     if (time_running) {
+        $("#toggle-time").get(0).innerHTML = "Запустить время";
         time_running = false;
     } else {
+        $("#toggle-time").get(0).innerHTML = "Остановить время";
         time_running = true;
         tick_time();
     }
 }
 
 function correct_speed() {
-    if (curDate.getTime() > 0 && curDate.getTime() < 0) {
-
+    if (curDate.getTime() > 33108004800000) {
+        speed = 0.125;
+    } else {
+        speed = 1;
     }
 }
 
@@ -348,7 +353,6 @@ function init_slider()
         range: false,
         min: new Date("3018-04-16").getTime() / 1000,
         max: new Date("3019-03-25").getTime() / 1000,
-        step: 43200,
         value: curDate.getTime()/1000,
         slide: function( event, ui ) {
             var date = new Date(ui.value * 1000);
