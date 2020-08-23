@@ -165,7 +165,7 @@ function new_time(date)
                 var log_height = $($(".log").get(0)).height();
                 console.log(log_height);
                 if ($("#event-log").get(0).clientHeight < log_height * $("#event-log").children().length) {
-                    $($(".log").get(0)).css("margin-top", "-" + (log_height * $("#event-log").children().length - $("#event-log").get(0).clientHeight) + "px");
+                    $($(".log").get(0)).css("margin-top", "-" + (log_height * $("#event-log").children().length - $("#event-log").get(0).clientHeight + 5) + "px");
                 }
             }
         } else if (e.start > dateObj) {
@@ -174,7 +174,7 @@ function new_time(date)
                 var log_height = $($(".log").get(0)).height();
                 console.log(log_height);
                 if ($("#event-log").get(0).clientHeight < log_height * $("#event-log").children().length) {
-                    $($(".log").get(0)).css("margin-top", "-" + (log_height * $("#event-log").children().length - $("#event-log").get(0).clientHeight) + "px");
+                    $($(".log").get(0)).css("margin-top", "-" + (log_height * $("#event-log").children().length - $("#event-log").get(0).clientHeight + 5) + "px");
                 }
             }
                
