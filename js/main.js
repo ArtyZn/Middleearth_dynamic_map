@@ -293,12 +293,12 @@ function init()
     
     curDate = new Date("3018-04-16");
     new_time(curDate);
-    characters.forEach(ch => {
+    /*characters.forEach(ch => {
     show_path(ch)
     show_char(ch)
-    });
-   // if ($("#show-paths-checkbox").get(0).checked) characters.forEach(ch => { if ($('.show-path-checkbox[char="' + ch.name + '"]').get(0).checked) show_path(ch); });
-    //if ($("#show-chars-checkbox").get(0).checked) characters.forEach(ch => { if ($('.show-char-checkbox[char="' + ch.name + '"]').get(0).checked) show_char(ch); });
+    });*/
+   if ($("#show-paths-checkbox").get(0).checked) characters.forEach(ch => { if ($('.show-path-checkbox[char="' + ch.name + '"]').get(0).checked) show_path(ch); });
+    if ($("#show-chars-checkbox").get(0).checked) characters.forEach(ch => { if ($('.show-char-checkbox[char="' + ch.name + '"]').get(0).checked) show_char(ch); });
 }
 
 function createPreset(zoom){
@@ -365,7 +365,7 @@ $(function(){
     $("#tabs").tabs();
     $("#show-paths-checkbox").on("change", function (e) {
         if ($("#show-paths-checkbox").get(0).checked) {
-          // characters.forEach(ch => { if ($('.show-path-checkbox[char="' + ch.name + '"]').get(0).checked) show_path(ch); });
+           characters.forEach(ch => { if ($('.show-path-checkbox[char="' + ch.name + '"]').get(0).checked) show_path(ch); });
         } else {
             characters.forEach(ch => hide_path(ch));
         } 
