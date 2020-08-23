@@ -316,24 +316,45 @@ function createBalloonContent(zoom, content){
 
 
 var started = false;
-var interval;
+var intervalFast;
+var intervalSlow;
 function startTime()
 {
     if(started)
          stopTime();
 
-    interval = setInterval(function() {
+         
+        intervalFast= setInterval(function() {
         curDate = new Date(curDate.getTime() +4320000 );
         new_time(curDate);
+        check();
         //init_slider();
       }, 40);
       started = true;
 }
 
+function check()
+{
+    //alert("AAAAAA");
+    if(curDate.getTime()>(new Date("3019-02-25")).getTime() && intervalFast!=null)
+    {
+        stopTime();
+        //alert("AAAAAA");
+        intervalSlow = setInterval(function() {
+            curDate = new Date(curDate.getTime() +4320000/2 );
+            new_time(curDate);
+            //init_slider();
+          }, 40);
+          started = true;
+    }
+}
 function stopTime()
 {
     started = false;
-    clearInterval(interval);
+    clearInterval(intervalFast);
+    intervalFast = null;
+    clearInterval(intervalSlow);
+    intervalSlow = null;
 }
 
 function init_slider()
