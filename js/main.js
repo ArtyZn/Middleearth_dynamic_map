@@ -187,7 +187,7 @@ function init()
 
     var LAYER_NAME = 'user#layer',
     MAP_TYPE_NAME = 'user#customMap',
-    TILES_PATH = 'images\\tiles',
+    TILES_PATH = 'images/tiles',
 
 
     MAX_ZOOM = 23,
@@ -317,47 +317,34 @@ function createBalloonContent(zoom, content){
     return null;
 }
 
+var time_running = false;
+var speed = 1;
 
-var started = false;
-var intervalFast;
-var intervalSlow;
-function startTime()
-{
-    if(started)
-         stopTime();
-
-         
-        intervalFast= setInterval(function() {
-        curDate = new Date(curDate.getTime() +4320000 );
-        new_time(curDate);
-        check();
-        //init_slider();
-      }, 40);
-      started = true;
-}
-
-function check()
-{
-    //alert("AAAAAA");
-    if(curDate.getTime()>(new Date("3019-02-25")).getTime() && intervalFast!=null)
-    {
-        stopTime();
-        //alert("AAAAAA");
-        intervalSlow = setInterval(function() {
-            curDate = new Date(curDate.getTime() +4320000/2 );
-            new_time(curDate);
-            //init_slider();
-          }, 40);
-          started = true;
+function tick_time() {
+    if (time_running) {
+        $("#slider-range").slider("value", $("#slider-range").slider("value") + 7200 * speed);
+        correct_speed();
+        setTimeout(tick_time, 10);
     }
 }
-function stopTime()
-{
-    started = false;
-    clearInterval(intervalFast);
-    intervalFast = null;
-    clearInterval(intervalSlow);
-    intervalSlow = null;
+
+function toggle_time() {
+    if (time_running) {
+        $("#toggle-time").get(0).innerHTML = "Запустить время";
+        time_running = false;
+    } else {
+        $("#toggle-time").get(0).innerHTML = "Остановить время";
+        time_running = true;
+        tick_time();
+    }
+}
+
+function correct_speed() {
+    if (curDate.getTime() > 33108004800000) {
+        speed = 0.125;
+    } else {
+        speed = 1;
+    }
 }
 
 function init_slider()
@@ -366,14 +353,20 @@ function init_slider()
         range: false,
         min: new Date("3018-04-16").getTime() / 1000,
         max: new Date("3019-03-25").getTime() / 1000,
-        step: 43200,
-        values: [curDate.getTime()/1000],
+        value: curDate.getTime()/1000,
         slide: function( event, ui ) {
-            var date = new Date(ui.values[ 0 ] *1000);
+            var date = new Date(ui.value * 1000);
                        
-            curDate = new Date(ui.values[ 0 ] *1000);
+            curDate = new Date(ui.value * 1000);
             new_time(curDate);
-        }
+        },
+        change: function( event, ui ) {
+            var date = new Date(ui.value * 1000);
+                       
+            curDate = new Date(ui.value * 1000);
+            new_time(curDate);
+        },
+
     });
 }
 
