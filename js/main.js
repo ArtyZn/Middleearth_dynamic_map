@@ -73,7 +73,7 @@ function show_char(ch) {
 function new_time(date)
 {
     $( "#cur-date" )[0].innerHTML = date.getFullYear() +"-" + (date.getMonth()+1)+ "-" + date.getDate();
-    
+
     var heroes = [];
     characters.forEach(ch =>
     {
@@ -159,7 +159,7 @@ function new_time(date)
         }
     });
 
-        
+    /* 
     if(clusterer != null){
         map.geoObjects.remove(clusterer);
     }
@@ -173,7 +173,7 @@ function new_time(date)
         gridSize: 32,
         clusterDisableClickZoom: true
     });
-
+*/
     //добавление кластеризатора
     clusterer.add(heroes);
     map.geoObjects.add(clusterer);
@@ -294,10 +294,9 @@ function init()
     curDate = new Date("3018-04-16");
     new_time(curDate);
     characters.forEach(ch => {
-    show_path(ch)
-    show_char(ch)
+        show_path(ch);
     });
-   // if ($("#show-paths-checkbox").get(0).checked) characters.forEach(ch => { if ($('.show-path-checkbox[char="' + ch.name + '"]').get(0).checked) show_path(ch); });
+    //if ($("#show-paths-checkbox").get(0).checked) characters.forEach(ch => { if ($('.show-path-checkbox[char="' + ch.name + '"]').get(0).checked) show_path(ch); });
     //if ($("#show-chars-checkbox").get(0).checked) characters.forEach(ch => { if ($('.show-char-checkbox[char="' + ch.name + '"]').get(0).checked) show_char(ch); });
 }
 
