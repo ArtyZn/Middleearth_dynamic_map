@@ -72,101 +72,111 @@ function show_char(ch) {
 
 function new_time(date)
 {
-
-
-  $( "#cur-date" )[0].innerHTML = date.getFullYear() +"-" + (date.getMonth()+1)+ "-" + date.getDate();
-  //$( "#cur-date" )[0].innerHTML = date;
+    $( "#cur-date" )[0].innerHTML = date.getFullYear() +"-" + (date.getMonth()+1)+ "-" + date.getDate();
+    //$( "#cur-date" )[0].innerHTML = date;
     var heroes = [];
     characters.forEach(ch =>
+    {
+    
+        if(ch.placemark == null)
         {
-     
-            if(ch.placemark == null)
+            ch.placemark =  new ymaps.Placemark([ch.movements[0].points[0][0], ch.movements[0].points[0][1]], {
+                balloonContentHeader: ch.name,
+                iconContent: ch.name,
+                balloonContent: ''
+            }, {
+                preset: 'islands#darkOrangeStretchyIcon',
+                visible: false
+            });
+        }
+        for(var i = 0; i < ch.movements.length; i++)
+        {
+            var start = new Date(ch.movements[i].start);
+            var end =  new Date(ch.movements[i].end);
+            // alert(start +"  " + date+ " " + end);
+            
+            if(start.getTime() < date.getTime() &&  date.getTime() <=  end.getTime())
             {
-                ch.placemark =  new ymaps.Placemark([ch.movements[0].points[0][0], ch.movements[0].points[0][1]], {
+                //изменение описания метки
+                ch.placemark.properties.set({
                     balloonContentHeader: ch.name,
                     iconContent: ch.name,
-                    balloonContent: ''
-                }, {
-                    preset: 'islands#darkOrangeStretchyIcon',
-                    visible: false
+                    balloonContent : ch.movements[i].description
                 });
-            }
-            for(var i = 0; i < ch.movements.length; i++)
-            {
-                var start = new Date(ch.movements[i].start);
-                var end =  new Date(ch.movements[i].end);
-               // alert(start +"  " + date+ " " + end);
-                
-                if(start.getTime() < date.getTime() &&  date.getTime() <=  end.getTime())
+
+
+                var totalDist = 0;
+                for(var j = 0; j < ch.movements[i].points.length - 1; j++)
                 {
-                    //изменение описания метки
-                    ch.placemark.properties.set({
-                        balloonContentHeader: ch.name,
-                        iconContent: ch.name,
-                        balloonContent : ch.movements[i].description
-                    });
-
-
-                    var totalDist = 0;
-                    for(var j = 0; j < ch.movements[i].points.length - 1; j++)
+                    p1 = ch.movements[i].points[j];
+                    p2 = ch.movements[i].points[j+1];
+                    totalDist += getDistance(p1, p2);
+                }
+                
+                var t1 = date.getTime() - start.getTime();
+                var t2 = end.getTime() - start.getTime();
+                var persents = t1 * 1.0 / t2;
+                var dist = totalDist*persents;
+                var curDist=0;
+                
+                for(var j = 0; j < ch.movements[i].points.length - 1; j++)
+                {
+                    p1 = ch.movements[i].points[j];
+                    p2 = ch.movements[i].points[j+1];
+                    prev =  curDist;
+                    curDist += getDistance(p1, p2);
+                    //alert(prev + " " + dist +"  " + curDist )
+                    if(prev<=dist && dist<= curDist)
                     {
-                        p1 = ch.movements[i].points[j];
-                        p2 = ch.movements[i].points[j+1];
-                        totalDist += getDistance(p1, p2);
-                    }
+                        var a = dist - prev;
+                        var b = curDist - prev;
+                        var pers = a * 1.0 / b;
+                        //alert(pers);
+                        // alert(p1 + " " + p2 + "  " + pers);
+                        var x = p1[0] + (p2[0] - p1[0])*pers;
+                        var y = p1[1] + (p2[1] - p1[1])*pers;
                     
-                    var t1 = date.getTime() - start.getTime();
-                    var t2 = end.getTime() - start.getTime();
-                    var persents = t1 * 1.0 / t2;
-                    var dist = totalDist*persents;
-                    var curDist=0;
-                 
-                    for(var j = 0; j < ch.movements[i].points.length - 1; j++)
-                    {
-                        p1 = ch.movements[i].points[j];
-                        p2 = ch.movements[i].points[j+1];
-                        prev =  curDist;
-                        curDist += getDistance(p1, p2);
-                        //alert(prev + " " + dist +"  " + curDist )
-                        if(prev<=dist && dist<= curDist)
-                        {
-                            var a = dist - prev;
-                            var b = curDist - prev;
-                            var pers = a * 1.0 / b;
-                            //alert(pers);
-                           // alert(p1 + " " + p2 + "  " + pers);
-                            var x = p1[0] + (p2[0] - p1[0])*pers;
-                            var y = p1[1] + (p2[1] - p1[1])*pers;
-                        
-                            ch.placemark.geometry.setCoordinates([x,y]);
-                            if(ch.hidden == false) {
-                                heroes.push(ch.placemark);
-                            }
-
-                            map.geoObjects.add(ch.placemark);
+                        ch.placemark.geometry.setCoordinates([x,y]);
+                        if(ch.hidden == false) {
+                            heroes.push(ch.placemark);
                         }
+
+                        map.geoObjects.add(ch.placemark);
                     }
                 }
             }
-        });
-        
-        if(clusterer != null){
-            map.geoObjects.remove(clusterer);
         }
+    });
+    
+    dateObj = new Date(date);
+    events.forEach(e => {
+        if (e.start < dateObj && dateObj < e.end) {
+            if (!$('.log[desc="' + e.event + '"]').length)
+                $('#map-log').append(`<div class="log" desc="${e.event}">${e.event}</div>`);
+        } else if (dateObj > e.end || e.start > dateObj) {
+            if ($('.log[desc="' + e.event + '"]').length)
+                $('.log[desc="' + e.event + '"]').get(0).remove();
+        }
+    });
 
-        clusterer = new ymaps.Clusterer({
-            preset: 'islands#invertedDarkOrangeClusterIcons',
-            groupByCoordinates: false,
-            clusterDisableClickZoom: true,
-            clusterHideIconOnBalloonOpen: false,
-            geoObjectHideIconOnBalloonOpen: false,
-            gridSize: 32,
-            clusterDisableClickZoom: true
-        });
+        
+    if(clusterer != null){
+        map.geoObjects.remove(clusterer);
+    }
 
-        //добавление кластеризатора
-        clusterer.add(heroes);
-        map.geoObjects.add(clusterer);
+    clusterer = new ymaps.Clusterer({
+        preset: 'islands#invertedDarkOrangeClusterIcons',
+        groupByCoordinates: false,
+        clusterDisableClickZoom: true,
+        clusterHideIconOnBalloonOpen: false,
+        geoObjectHideIconOnBalloonOpen: false,
+        gridSize: 32,
+        clusterDisableClickZoom: true
+    });
+
+    //добавление кластеризатора
+    clusterer.add(heroes);
+    map.geoObjects.add(clusterer);
 }
 
 function init()

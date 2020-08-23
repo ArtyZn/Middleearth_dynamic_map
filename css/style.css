@@ -127,3 +127,12 @@ div
 .gui-tab {
     overflow: hidden;
 }
+
+#slider-vertical {
+    position: absolute; 
+    height: auto; 
+    top: 42px; 
+    bottom: 9px; 
+    margin-top: 4px;
+    margin-left: 4px;
+}
