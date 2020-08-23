@@ -423,8 +423,10 @@ $(function(){
                 mrg = $($(".log").get(0)).css("margin-top").slice(0, $($(".log").get(0)).css("margin-top").length - 2) - 0; // "-0" - лучший способ преобразовать строку в число
             else
                 mrg = 0;
-            if (mrg + e.originalEvent.deltaY / Math.abs(e.originalEvent.deltaY) * -1 < 0)
+            if (mrg + e.originalEvent.deltaY / Math.abs(e.originalEvent.deltaY) * -15 <= 0)
                 $($(".log").get(0)).css("margin-top", (mrg + e.originalEvent.deltaY / Math.abs(e.originalEvent.deltaY) * -15) + "px");
+            else
+                $($(".log").get(0)).css("margin-top", "0px");
         }
     });
 });
